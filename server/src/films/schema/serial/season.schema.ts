@@ -11,7 +11,7 @@ export class Season {
   @Prop()
   name: string
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Serial' }] })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Serial' })
   serial_id: Serial
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Seria' }] })

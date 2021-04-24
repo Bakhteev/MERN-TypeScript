@@ -4,7 +4,7 @@ import * as mongoose from 'mongoose'
 import { Category } from './category.schema'
 import { Review } from 'src/user/schema/rewiew.schema'
 import { Author } from './author.schema'
-import { Role } from './role.schema'
+import { cast } from './interface'
 
 export type FilmDocument = Film & Document
 
@@ -34,11 +34,11 @@ export class Film {
   @Prop()
   publish_date: Date
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Author' }] })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Author' })
   author: Author
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }] })
-  cast: Role[]
+  @Prop()
+  cast: cast[]
 
   @Prop()
   price: number
@@ -59,7 +59,7 @@ export class Film {
   dislikes: number
 
   @Prop()
-  tags: string
+  tags: string[]
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }] })
   rewiews: Review[]
