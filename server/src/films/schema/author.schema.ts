@@ -11,6 +11,9 @@ export class Author {
   @Prop()
   name: string
 
+  @Prop()
+  picture: string
+
   @Prop([
     { type: mongoose.Schema.Types.ObjectId, ref: 'Film' },
     { type: mongoose.Schema.Types.ObjectId, ref: 'Serial' },

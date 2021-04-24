@@ -3,7 +3,7 @@ import { Document } from 'mongoose'
 import * as mongoose from 'mongoose'
 import { Review } from 'src/user/schema/rewiew.schema'
 import { Season } from './season.schema'
-import { Role } from '../role.schema'
+import { cast } from '../interface'
 
 export type SeriaDocument = Seria & Document
 
@@ -27,8 +27,8 @@ export class Seria {
   @Prop()
   publish_date: Date
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }] })
-  cast: Role[]
+  @Prop()
+  cast: cast[]
 
   @Prop()
   rating: number
@@ -45,7 +45,7 @@ export class Seria {
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }] })
   rewiews: Review[]
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Season' }] })
+  @Prop({  type: mongoose.Schema.Types.ObjectId, ref: 'Season' })
   seasons_id: Season
 }
 
