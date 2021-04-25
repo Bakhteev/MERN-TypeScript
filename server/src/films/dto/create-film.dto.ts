@@ -14,7 +14,8 @@ export class CreateFilmDto {
 
 class cast {
   readonly role: string
-  readonly acter: acter
+  readonly acter: string
+  readonly picture: any[]
 }
 
 class acter {
@@ -23,5 +24,5 @@ class acter {
 
 class author{
   readonly name: string
-  readonly picture: string
+  readonly picture: []
 }
