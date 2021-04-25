@@ -3,7 +3,7 @@ import { Document } from 'mongoose'
 import * as mongoose from 'mongoose'
 import { Review } from 'src/user/schema/rewiew.schema'
 import { Season } from './season.schema'
-import { cast } from '../interface'
+import { cast } from 'src/films/schema/interface'
 
 export type SeriaDocument = Seria & Document
 

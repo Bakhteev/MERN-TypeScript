@@ -2,13 +2,14 @@ export class CreateFilmDto {
   readonly name: string
   readonly language: string
   readonly description: string
-  // readonly genre: string[]
+  readonly genre: string[]
   readonly publish_date: string
   readonly authorParam: author
   readonly cast: cast[]
   readonly price: number
-  readonly categoryName: string[]
+  readonly category: string[]
   readonly tags: string[]
+  readonly time: string
 }
 
 class cast {
@@ -16,9 +17,6 @@ class cast {
   readonly acter: acter
 }
 
-class category{
-  readonly name: string
-}
 class acter {
   readonly name: string
 }

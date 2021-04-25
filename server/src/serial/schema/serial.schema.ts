@@ -4,9 +4,9 @@ import * as mongoose from 'mongoose'
 import { Review } from 'src/user/schema/rewiew.schema'
 import { Seria } from './seria.shema'
 import { Season } from './season.schema'
-import { Author } from '../author.schema'
-import { Category } from '../category.schema'
-import { cast } from '../interface'
+import { cast } from 'src/films/schema/interface'
+import { Author } from 'src/films/schema/author.schema'
+import { Category } from 'src/category/schema/category.schema'
 
 export type SerialDocument = Serial & Document
 
