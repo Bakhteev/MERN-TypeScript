@@ -7,6 +7,7 @@ import { GenreModule } from './genre/genre.module';
 import { CategoryModule } from './category/category.module';
 import { AuthorModule } from './author/author.module';
 import { FilesModule } from './files/files.module';
+import { ActerModule } from './acter/acter.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { FilesModule } from './files/files.module';
     CategoryModule,
     AuthorModule,
     FilesModule,
+    ActerModule,
   ],
 })
 export class AppModule {}
