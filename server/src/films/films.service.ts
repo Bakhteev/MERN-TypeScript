@@ -1,18 +1,22 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
-import { CreateCategoryDto } from './dto/create-category.dto'
+import { CreateCategoryDto } from '../category/dto/create-category.dto'
 import { CreateFilmDto } from './dto/create-film.dto'
 import { Author, AuthorDocument } from './schema/author.schema'
-import { Category, CategoryDocument } from './schema/category.schema'
+import { Category, CategoryDocument } from '../category/schema/category.schema'
 import { Film, FilmDocument } from './schema/film.schema'
+import { CategoryService } from 'src/category/category.service'
+import { CreateGenreDto } from 'src/genre/dto/create-genre.dto'
+import { GenreService } from 'src/genre/genre.service'
 
 @Injectable()
 export class FilmsService {
   constructor(
     @InjectModel(Film.name) private filmModel: Model<FilmDocument>,
     @InjectModel(Author.name) private authorModel: Model<AuthorDocument>,
-    @InjectModel(Category.name) private categoryModel: Model<CategoryDocument>
+    private categoryService: CategoryService,
+    private genreService: GenreService
   ) {}
 
   async getFilms() {
@@ -38,26 +42,25 @@ export class FilmsService {
 
       const newFilm = await this.filmModel.create({
         ...dto,
-        time: 0,
         rating: 0,
         viewers: 0,
         likes: 0,
         dislikes: 0,
       })
 
-      console.log(author)
-
       if (author) {
         await this.authorModel.findByIdAndUpdate(author._id, {
           film_and_serials: newFilm._id,
         })
         newFilm.author = author._id
+        newFilm.save()
+        return newFilm
       }
 
       const newAuthor = await this.authorModel.create({
         name: dto.authorParam.name,
         picture: dto.authorParam.picture,
-        film_and_serials: [newFilm._id],
+        film_and_serials: newFilm._id,
       })
 
       newFilm.author = newAuthor._id
@@ -69,26 +72,20 @@ export class FilmsService {
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST)
     }
   }
+
   async getCategories() {
-    const categories = await this.categoryModel.find()
-    return categories
+    return this.categoryService.getCategories()
   }
 
   async createCategory(dto: CreateCategoryDto) {
-    try {
-      const category = await this.categoryModel.findOne({
-        name: { $regex: new RegExp(dto.name) },
-      })
-      if (category) {
-        throw new HttpException(
-          'Такая категория уже существует',
-          HttpStatus.BAD_REQUEST
-        )
-      }
-      const newCategory = await this.categoryModel.create({ ...dto })
-      return newCategory
-    } catch (e) {
-      throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR)
-    }
+    return this.categoryService.createCategory(dto)
+  }
+
+  async getGenres() {
+    return this.genreService.getGenres()
+  }
+  
+  async createGenre(dto: CreateGenreDto) {
+    return this.genreService.createGenre(dto)
   }
 }
