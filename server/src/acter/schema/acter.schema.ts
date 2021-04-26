@@ -15,7 +15,7 @@ export class Acter {
 
   @Prop([
     { type: mongoose.Schema.Types.ObjectId, ref: 'Film' },
-    { type: mongoose.Schema.Types.ObjectId, ref: 'Serial' },
+    { type: mongoose.Schema.Types.ObjectId, ref: 'Serial'},
   ])
   film_or_serial_id: Film[] | Serial[]
 }

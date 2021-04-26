@@ -5,7 +5,8 @@ export class CreateFilmDto {
   readonly genre: string[]
   readonly publish_date: string
   readonly authorParam: author
-  readonly cast: cast[]
+  readonly cast: string
+  // readonly cast: cast[]
   readonly price: number
   readonly category: string[]
   readonly tags: string[]
