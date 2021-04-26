@@ -40,6 +40,10 @@ export class FilmsService {
         name: { $regex: new RegExp(dto.authorParam.name, 'i') },
       })
 
+      const cast = JSON.parse(dto.cast)
+
+      console.log(cast)
+
       const newFilm = await this.filmModel.create({
         ...dto,
         rating: 0,
@@ -84,7 +88,7 @@ export class FilmsService {
   async getGenres() {
     return this.genreService.getGenres()
   }
-  
+
   async createGenre(dto: CreateGenreDto) {
     return this.genreService.createGenre(dto)
   }

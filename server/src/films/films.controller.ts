@@ -26,7 +26,6 @@ export class FilmsController {
   @UseInterceptors(
     FileFieldsInterceptor([
       { name: 'poster', maxCount: 1 },
-      { name: 'picture', maxCount: 1 },
     ])
   )
   createFilm(@UploadedFiles() files, @Body() dto: CreateFilmDto) {
@@ -36,7 +35,7 @@ export class FilmsController {
     console.log(dto)
 
     console.log(poster)
-    // return this.filmsService.createFilm(dto)
+    return this.filmsService.createFilm(dto)
   }
 
   @Get('/category')
