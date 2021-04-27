@@ -4,13 +4,13 @@ import * as fs from 'fs'
 import * as uuid from 'uuid'
 
 export enum FileType {
-  VIDEO = 'audio',
+  VIDEO = 'video',
   POSTER = 'image',
 }
 
 @Injectable()
 export class FilesService {
-  createFile(type: FileType, file): string {
+  createFile(type: FileType, file: Express.Multer.File): string {
     try {
       const fileExtension = file.originalname.split('.').pop()
       const fileName = uuid.v4() + '.' + fileExtension

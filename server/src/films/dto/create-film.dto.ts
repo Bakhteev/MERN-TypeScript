@@ -4,26 +4,25 @@ export class CreateFilmDto {
   readonly description: string
   readonly genre: string[]
   readonly publish_date: string
-  readonly authorParam: author
-  readonly cast: string
-  // readonly cast: cast[]
+  readonly authorName: string
+  readonly cast: string[]
   readonly price: number
   readonly category: string[]
   readonly tags: string[]
   readonly time: string
 }
 
-class cast {
-  readonly role: string
-  readonly acter: string
-  readonly picture: any[]
-}
+// class cast {
+//   readonly role: string
+//   readonly acter: string
+//   readonly picture: any
+// }
 
-class acter {
-  readonly name: string
-}
+// class acter {
+//   readonly name: string
+// }
 
-class author{
-  readonly name: string
-  readonly picture: []
-}
+// class author{
+//   readonly name: string
+//   readonly picture: []
+// }
