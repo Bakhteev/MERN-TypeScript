@@ -6,12 +6,17 @@ import {
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common'
-import { FileFieldsInterceptor } from '@nestjs/platform-express'
+import {
+  AnyFilesInterceptor,
+  FileFieldsInterceptor,
+} from '@nestjs/platform-express'
 import { CategoryService } from 'src/category/category.service'
 import { CreateGenreDto } from 'src/genre/dto/create-genre.dto'
 import { CreateCategoryDto } from '../category/dto/create-category.dto'
 import { CreateFilmDto } from './dto/create-film.dto'
 import { FilmsService } from './films.service'
+import { Express } from 'express'
+import { CreateActerDto } from 'src/acter/dto/create-acter.dto'
 
 @Controller('films')
 export class FilmsController {
@@ -26,16 +31,23 @@ export class FilmsController {
   @UseInterceptors(
     FileFieldsInterceptor([
       { name: 'poster', maxCount: 1 },
+      { name: 'film', maxCount: 1 },
+      { name: 'authorPicture', maxCount: 1 },
     ])
   )
   createFilm(@UploadedFiles() files, @Body() dto: CreateFilmDto) {
-    const { poster } = files
+    const { poster, film, authorPicture } = files
 
     // const { poster } = files
-    console.log(dto)
+    // console.log(dto)
 
-    console.log(poster)
-    return this.filmsService.createFilm(dto)
+    // console.log(files)
+    return this.filmsService.createFilm(
+      dto,
+      poster[0],
+      film[0],
+      authorPicture[0]
+    )
   }
 
   @Get('/category')
@@ -56,5 +68,14 @@ export class FilmsController {
   @Get('/genre')
   getGenres() {
     return this.filmsService.getGenres()
+  }
+
+  @Post('/acters')
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'picture', maxCount: 1 }]))
+  createActers(@UploadedFiles() file, @Body() dto: CreateActerDto) {
+    console.log(dto)
+
+    const { picture } = file
+    return this.filmsService.createActer(dto, picture[0])
   }
 }
