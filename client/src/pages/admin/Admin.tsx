@@ -1,6 +1,10 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { useInput } from '../hooks/useInput'
+import { useInput } from '../../hooks/useInput'
+import { getCategories, getGenres } from '../../http/filmApi'
+import CreateActers from './createActer'
+import DropDown from './dropDown'
+import CreateTags from './CreateTags'
 
 interface Acters {
   role: string
@@ -16,65 +20,47 @@ interface Author {
 
 export const AdminTop: React.FC = () => {
   const [poster, setPoster] = useState<File | null>(null)
+
   const [film, setFilm] = useState<File | null>(null)
+
   const [author, setAuthor] = useState({})
+
   const [acters, setActers] = useState<any>([])
+
   const [actersId, setActersId] = useState<any>([])
+
   const [data, setData] = useState(null)
 
+  const [categorys, setCategorys] = useState<any>([])
+  const [choosedCategorys, setChoosedCategorys] = useState<any>([])
+
+  const [genres, setGenres] = useState<any>([])
+  const [choosedGenres, setChoosedGenres] = useState<any>([])
+
   const filmName = useInput('')
+  const price = useInput('')
+  const time = useInput('')
 
-  console.log(author)
+  console.log(choosedGenres)
 
-  const changeInfo = (
-    key: string,
-    value: string | File | null,
-    number: number | string
-  ) => {
-    setActers(
-      acters.map((acter: Acters) =>
-        acter.number === number ? { ...acter, [key]: value } : acter
-      )
-    )
-  }
+  useEffect(() => {
+    getCategories().then((data) => setCategorys(data))
+    getGenres().then((data) => setGenres(data))
+  }, [])
 
   const changeAuthor = (key: string, value: any) => {
     setAuthor({ ...author, [key]: value })
   }
 
-  const addActer = () => {
-    setActers([
-      ...acters,
-      { role: '', name: '', picture: '', number: Date.now() },
-    ])
+  const chooseItem = (item: any, setState: Function) => {
+    setState((prev: any) => {
+      const oldItem = prev.filter((i: any) => i === item)
+      if (oldItem.length > 0) {
+        return prev
+      }
+      return [...prev, item]
+    })
   }
-
-  const postActer = async (number: number | string) => {
-    const acter = acters.filter((item: Acters) => item.number === number)
-
-    console.log(acter)
-
-    const { role, picture, name } = acter[0]
-
-    console.log(role, picture, name)
-
-    const formData = new FormData()
-
-    formData.append('name', name)
-    formData.append('role', role)
-    formData.append('picture', picture)
-
-    console.log(formData)
-
-    const { data } = await axios.post(
-      'http://localhost:5000/films/acters',
-      formData
-    )
-    console.log(data)
-    setActersId((prev: any) => [...prev, data._id])
-  }
-
-  console.log(actersId)
 
   const postData = async () => {
     const formData = new FormData()
@@ -102,16 +88,26 @@ export const AdminTop: React.FC = () => {
   return (
     <div
       className="container"
-      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        color: 'black',
+      }}
     >
       <h1>Создание фильма</h1>
       <label htmlFor="">
         <input type="text" {...filmName} placeholder="название фильма" />
       </label>
       <label htmlFor="">
-        <textarea name="" id="" cols={30} rows={10} placeholder="Описание фильма"></textarea>
+        <textarea
+          name=""
+          id=""
+          cols={30}
+          rows={10}
+          placeholder="Описание фильма"
+        ></textarea>
       </label>
-      
       <label htmlFor="poster" style={{ color: 'black' }}>
         Poster
         <input
@@ -154,55 +150,23 @@ export const AdminTop: React.FC = () => {
           }
         />
       </label>
-      <button onClick={addActer}>добавить актера</button>
-      {acters.map((acter: Acters) => (
-        <div key={acter.number} className="flex">
-          <label htmlFor="role">
-            <input
-              type="text"
-              id="role"
-              onChange={(e) => changeInfo('role', e.target.value, acter.number)}
-            />
-          </label>
-          <label htmlFor="name">
-            <input
-              type="text"
-              id="name"
-              onChange={(e) => changeInfo('name', e.target.value, acter.number)}
-            />
-          </label>
-          <label htmlFor="picture">
-            <input
-              type="file"
-              id="picture"
-              onChange={(e) =>
-                changeInfo(
-                  'picture',
-                  e.target.files === null ? null : e.target.files[0],
-                  acter.number
-                )
-              }
-            />
-          </label>
-          <button onClick={() => postActer(acter.number)}>Загрузить</button>
-        </div>
-      ))}
+      <input type="text" id="time" {...time} />
+      <DropDown
+        items={categorys}
+        keyWord={'Категорию'}
+        chooseItem={chooseItem}
+        setState={setChoosedCategorys}
+      />
+      <DropDown
+        items={genres}
+        keyWord={'Жанр'}
+        chooseItem={chooseItem}
+        setState={setChoosedGenres}
+      />
+      <CreateActers setActersId={setActersId} />
+      <CreateTags />
+      <input type="text" id="price" {...price} placeholder="введите цену" />
       <button onClick={postData}>отправить</button>
     </div>
   )
 }
-
-// type FileUploadProps = {
-//   setFile: Function
-// }
-
-// export const FileUpload: React.FC<FileUploadProps> = ({ setFile }) => {
-//   const uploadfile = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     setFile(e.target.files)
-//   }
-//   return (
-//     <>
-//       <input type="file" accept={'image/*, video/*'} onChange={uploadfile} />
-//     </>
-//   )
-// }

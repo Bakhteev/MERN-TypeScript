@@ -5,7 +5,7 @@ import {
   Redirect,
   Route,
 } from 'react-router-dom'
-import { AdminTop } from './pages/Admin'
+import { AdminTop } from './pages/admin/Admin'
 
 const App: React.FC = () => {
   return (

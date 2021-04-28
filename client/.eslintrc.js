@@ -1,14 +1,13 @@
-// eslint-disable-next-line no-undef
 module.exports = {
   env: {
     browser: true,
     es2021: true,
   },
-  extends: [
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'plugin:@typescript-eslint/recommended',
-  ],
+  // extends: [
+  //   'eslint:recommended',
+  //   'plugin:react/recommended',
+  //   'plugin:@typescript-eslint/recommended',
+  // ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
@@ -22,5 +21,6 @@ module.exports = {
     indent: ['error', 2],
     quotes: ['error', 'single'],
     semi: ['error', 'never'],
+    'react/prop-types': 'off',
   },
 }
