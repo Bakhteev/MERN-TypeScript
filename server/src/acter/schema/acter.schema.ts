@@ -9,7 +9,7 @@ export class Acter {
   name: string
 
   @Prop()
-  pictures: string
+  picture: string
 
   @Prop()
   role: string[]
