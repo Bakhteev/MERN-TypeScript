@@ -27,7 +27,7 @@ export class Film {
   @Prop()
   description: string
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Genre' })
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Genre' }] })
   genre: Genre[]
 
   @Prop()
@@ -39,8 +39,8 @@ export class Film {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Author' })
   author: Author
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Acter' })
-  cast: Acter[]
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Acter' }] })
+  acters: Acter[]
 
   @Prop()
   price: number

@@ -1,7 +1,11 @@
 import React, { ChangeEvent, useState } from 'react'
 
-const CreateTags = () => {
-  const [tags, setTags] = useState<any>([])
+interface CreateTagsProps {
+  tags: any[]
+  setTags: Function
+}
+
+const CreateTags: React.FC<CreateTagsProps> = ({tags, setTags}) => {
   const [timer, setTimer] = useState<any>()
 
   console.log(tags)
