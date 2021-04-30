@@ -39,9 +39,9 @@ export class FilmsController {
     const { poster, film, authorPicture } = files
 
     // const { poster } = files
-    // console.log(dto)
+    console.log(dto)
 
-    // console.log(files)
+    console.log(files)
     return this.filmsService.createFilm(
       dto,
       poster[0],

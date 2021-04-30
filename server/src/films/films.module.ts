@@ -28,9 +28,6 @@ import { Acter, ActerSchema } from 'src/acter/schema/acter.schema'
       { name: Category.name, schema: CategorySchema },
     ]),
     MongooseModule.forFeature([{ name: Acter.name, schema: ActerSchema }]),
-    // MongooseModule.forFeature([{ name: Seria.name, schema: SeriaSchema }]),
-    // MongooseModule.forFeature([{ name: Season.name, schema: SeasonSchema }]),
-    // MongooseModule.forFeature([{ name: Serial.name, schema: SerialSchema }]),
     MongooseModule.forFeature([{ name: Genre.name, schema: GenreSchema }]),
   ],
 })

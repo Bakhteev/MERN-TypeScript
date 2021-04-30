@@ -16,11 +16,6 @@ import { ActerService } from 'src/acter/acter.service'
 
 @Injectable()
 export class FilmsService {
-  private FilterFile(files: Express.Multer.File[], filterBy: string) {
-    const file = files.filter((item) => item.fieldname === filterBy)
-    return file
-  }
-
   constructor(
     @InjectModel(Film.name) private filmModel: Model<FilmDocument>,
     @InjectModel(Author.name) private authorModel: Model<AuthorDocument>,
@@ -31,7 +26,9 @@ export class FilmsService {
   ) {}
 
   async getFilms() {
-    const films = await this.filmModel.find().populate(['category', 'author'])
+    const films = await this.filmModel
+      .find()
+      .populate(['category', 'author', 'acters', 'genre'])
     return films
   }
 
@@ -49,10 +46,6 @@ export class FilmsService {
         authorPicture
       )
 
-      console.log(poster)
-
-      console.log(dto)
-
       let film = await this.filmModel.find({
         name: { $regex: new RegExp(dto.name, 'i') },
       })
@@ -65,8 +58,19 @@ export class FilmsService {
         name: { $regex: new RegExp(dto.authorName, 'i') },
       })
 
+      const tags = JSON.parse(dto.tags).map((tag) => tag.name)
+
       const newFilm = await this.filmModel.create({
-        ...dto,
+        name: dto.name,
+        language: dto.language,
+        description: dto.description,
+        publish_date: dto.publish_date,
+        acters: JSON.parse(dto.cast),
+        price: JSON.parse(dto.price),
+        tags,
+        category: JSON.parse(dto.category),
+        genre: JSON.parse(dto.genre),
+        time: dto.time,
         rating: 0,
         viewers: 0,
         likes: 0,
@@ -94,7 +98,6 @@ export class FilmsService {
       newFilm.save()
       return newFilm
     } catch (e) {
-      console.log(e)
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST)
     }
   }

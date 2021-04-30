@@ -22,7 +22,7 @@ const DropDown: React.FC<DropDownProps> = ({
 
   const handleActive = (item: any) => {
     setActive(item)
-    chooseItem(item, setState)
+    chooseItem(item._id, setState)
   }
 
   return (
