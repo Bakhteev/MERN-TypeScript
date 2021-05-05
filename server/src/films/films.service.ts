@@ -98,6 +98,7 @@ export class FilmsService {
       newFilm.save()
       return newFilm
     } catch (e) {
+      console.log(e)
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST)
     }
   }
@@ -116,7 +117,6 @@ export class FilmsService {
 
   async createGenre(dto: CreateGenreDto) {
     return this.genreService.createGenre(dto)
-  }
 
   async createActer(dto: CreateActerDto, file: Express.Multer.File) {
     return this.acterService.createActer(dto, file)

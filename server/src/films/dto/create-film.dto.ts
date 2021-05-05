@@ -26,3 +26,4 @@ export class CreateFilmDto {
 //   readonly name: string
 //   readonly picture: []
 // }
+

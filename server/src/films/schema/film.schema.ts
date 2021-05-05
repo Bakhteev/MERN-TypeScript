@@ -8,6 +8,7 @@ import { cast } from './interface'
 import { Genre } from 'src/genre/schema/genre.schema'
 import { Acter } from 'src/acter/schema/acter.schema'
 
+
 export type FilmDocument = Film & Document
 
 @Schema()
@@ -27,6 +28,7 @@ export class Film {
   @Prop()
   description: string
 
+
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Genre' }] })
   genre: Genre[]
 
@@ -39,8 +41,10 @@ export class Film {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Author' })
   author: Author
 
+
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Acter' }] })
   acters: Acter[]
+
 
   @Prop()
   price: number
