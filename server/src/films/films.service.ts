@@ -9,6 +9,10 @@ import { Film, FilmDocument } from './schema/film.schema'
 import { CategoryService } from 'src/category/category.service'
 import { CreateGenreDto } from 'src/genre/dto/create-genre.dto'
 import { GenreService } from 'src/genre/genre.service'
+import { Express } from 'express'
+import { FilesService, FileType } from 'src/files/files.service'
+import { CreateActerDto } from 'src/acter/dto/create-acter.dto'
+import { ActerService } from 'src/acter/acter.service'
 
 @Injectable()
 export class FilmsService {
@@ -16,17 +20,31 @@ export class FilmsService {
     @InjectModel(Film.name) private filmModel: Model<FilmDocument>,
     @InjectModel(Author.name) private authorModel: Model<AuthorDocument>,
     private categoryService: CategoryService,
-    private genreService: GenreService
+    private genreService: GenreService,
+    private filesService: FilesService,
+    private acterService: ActerService
   ) {}
 
   async getFilms() {
-    const films = await this.filmModel.find().populate(['category', 'author'])
+    const films = await this.filmModel
+      .find()
+      .populate(['category', 'author', 'acters', 'genre'])
     return films
   }
 
-  async createFilm(dto: CreateFilmDto): Promise<Film> {
+  async createFilm(
+    dto: CreateFilmDto,
+    poster: Express.Multer.File,
+    filmFile: Express.Multer.File,
+    authorPicture: Express.Multer.File
+  ): Promise<Film> {
     try {
-      console.log(dto)
+      const posterPath = this.filesService.createFile(FileType.POSTER, poster)
+      const filmPath = this.filesService.createFile(FileType.VIDEO, filmFile)
+      const authorPicturePath = this.filesService.createFile(
+        FileType.POSTER,
+        authorPicture
+      )
 
       let film = await this.filmModel.find({
         name: { $regex: new RegExp(dto.name, 'i') },
@@ -37,34 +55,42 @@ export class FilmsService {
       }
 
       const author = await this.authorModel.findOne({
-        name: { $regex: new RegExp(dto.authorParam.name, 'i') },
+        name: { $regex: new RegExp(dto.authorName, 'i') },
       })
 
-      const cast = JSON.parse(dto.cast)
-
-      console.log(cast)
+      const tags = JSON.parse(dto.tags).map((tag) => tag.name)
 
       const newFilm = await this.filmModel.create({
-        ...dto,
+        name: dto.name,
+        language: dto.language,
+        description: dto.description,
+        publish_date: dto.publish_date,
+        acters: JSON.parse(dto.cast),
+        price: JSON.parse(dto.price),
+        tags,
+        category: JSON.parse(dto.category),
+        genre: JSON.parse(dto.genre),
+        time: dto.time,
         rating: 0,
         viewers: 0,
         likes: 0,
         dislikes: 0,
+        poster: posterPath,
+        film: filmPath,
       })
 
       if (author) {
-        await this.authorModel.findByIdAndUpdate(author._id, {
-          film_and_serials: newFilm._id,
-        })
+        author.film_and_serials.push(newFilm._id)
         newFilm.author = author._id
         newFilm.save()
+        author.save()
         return newFilm
       }
 
       const newAuthor = await this.authorModel.create({
-        name: dto.authorParam.name,
-        picture: dto.authorParam.picture,
-        film_and_serials: newFilm._id,
+        name: dto.authorName,
+        picture: authorPicturePath,
+        film_and_serials: [newFilm._id],
       })
 
       newFilm.author = newAuthor._id
@@ -91,5 +117,8 @@ export class FilmsService {
 
   async createGenre(dto: CreateGenreDto) {
     return this.genreService.createGenre(dto)
+
+  async createActer(dto: CreateActerDto, file: Express.Multer.File) {
+    return this.acterService.createActer(dto, file)
   }
 }
