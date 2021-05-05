@@ -4,9 +4,9 @@ import * as mongoose from 'mongoose'
 import { Review } from 'src/user/schema/rewiew.schema'
 import { Seria } from './seria.shema'
 import { Season } from './season.schema'
-import { Author } from '../author.schema'
-import { Role } from '../role.schema'
-import { Category } from '../category.schema'
+import { cast } from 'src/films/schema/interface'
+import { Author } from 'src/films/schema/author.schema'
+import { Category } from 'src/category/schema/category.schema'
 
 export type SerialDocument = Serial & Document
 
@@ -33,11 +33,11 @@ export class Serial {
   @Prop()
   publish_date: Date
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Author' }] })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Author' })
   author: Author
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }] })
-  cast: Role[]
+  @Prop()
+  cast: cast[]
 
   @Prop()
   price: number
@@ -69,7 +69,7 @@ export class Serial {
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Seria' }] })
   serias: Seria[]
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.String, ref: 'Seria' }] })
+  @Prop({ type: mongoose.Schema.Types.String, ref: 'Seria' })
   time_of_seria: Seria['time']
 }
 

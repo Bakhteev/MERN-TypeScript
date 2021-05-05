@@ -1,10 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document } from 'mongoose'
 import * as mongoose from 'mongoose'
-import { Category } from './category.schema'
+import { Category } from '../../category/schema/category.schema'
 import { Review } from 'src/user/schema/rewiew.schema'
 import { Author } from './author.schema'
-import { Role } from './role.schema'
+import { cast } from './interface'
+import { Genre } from 'src/genre/schema/genre.schema'
 
 export type FilmDocument = Film & Document
 
@@ -25,20 +26,20 @@ export class Film {
   @Prop()
   description: string
 
-  @Prop()
-  genre: string
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Genre' })
+  genre: Genre[]
 
   @Prop()
   time: string
 
   @Prop()
-  publish_date: Date
+  publish_date: string
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Author' }] })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Author' })
   author: Author
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }] })
-  cast: Role[]
+  @Prop()
+  cast: cast[]
 
   @Prop()
   price: number
@@ -59,7 +60,7 @@ export class Film {
   dislikes: number
 
   @Prop()
-  tags: string
+  tags: string[]
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }] })
   rewiews: Review[]

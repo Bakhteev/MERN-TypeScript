@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import * as mongoose from 'mongoose'
 import { Film } from './film.schema'
-import { Serial } from './serial/serial.schema'
 import { Document } from 'mongoose'
+import { Serial } from 'src/serial/schema/serial.schema'
 
 export type AuthorDocument = Author & Document
 
@@ -10,6 +10,9 @@ export type AuthorDocument = Author & Document
 export class Author {
   @Prop()
   name: string
+
+  @Prop()
+  picture: string
 
   @Prop([
     { type: mongoose.Schema.Types.ObjectId, ref: 'Film' },
