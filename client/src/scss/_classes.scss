@@ -24,3 +24,16 @@
 .col-3 {
   width: 25%;
 }
+
+.btn-blue,
+.btn-transparent {
+  color: #FFFFFF;
+  background: #000F93;
+  border-radius: 20px;
+  padding: 17px 30px;
+}
+
+.btn-transparent {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+}

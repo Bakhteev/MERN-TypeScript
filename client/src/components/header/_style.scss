@@ -40,14 +40,6 @@
   &__btn {
     font-weight: 600;
     font-size: 16px;
-    color: #FFFFFF;
-    background: #000F93;
-    border-radius: 20px;
-    padding: 17px 30px;
     margin: 0 6px;
-    &.transparent {
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      background: transparent;
-    }
   }
 }

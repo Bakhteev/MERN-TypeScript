@@ -21,8 +21,8 @@ const Header: React.FC = () => {
             </ul>
           </nav>
           <div className="header__buttons">
-            <button className="header__btn transparent">Sign in</button>
-            <button className="header__btn">Register</button>
+            <button className="header__btn btn-transparent">Sign in</button>
+            <button className="header__btn btn-blue">Register</button>
           </div>
         </div>
       </div>
