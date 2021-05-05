@@ -17,24 +17,24 @@ export const AdminTop: React.FC = () => {
       <div className="flex">
         <input type="text" placeholder="Имя режиссера" name="authorName" />
         <label>
-          <FileUpload setFile={setAuthor} />
+          {/* <FileUpload setFile={setAuthor} /> */}
         </label>
       </div>
     </div>
   )
 }
 
-type FileUploadProps = {
-  setFile: Function
-}
+// type FileUploadProps = {
+//   setFile: Function
+// }
 
-export const FileUpload: React.FC<FileUploadProps> = ({ setFile }) => {
-  const uploadfile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFile(e.target.files)
-  }
-  return (
-    <>
-      <input type="file" accept={'image/*, videp/*'} onChange={uploadfile} />
-    </>
-  )
-}
+// export const FileUpload: React.FC<FileUploadProps> = ({ setFile }) => {
+//   const uploadfile = (e: React.ChangeEvent<HTMLInputElement>) => {
+//     setFile(e.target.files)
+//   }
+//   return (
+//     <>
+//       <input type="file" accept={'image/*, video/*'} onChange={uploadfile} />
+//     </>
+//   )
+// }
