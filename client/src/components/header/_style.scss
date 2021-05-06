@@ -1,45 +1,53 @@
-.header{
+.header {
+  box-shadow: 0 29px 39px rgba(0, 0, 0, 0.01);
   background: #131313;
-  box-shadow: 0px 29px 39px rgba(0, 0, 0, 0.01);
+
   &__content {
+    @include flex-center(space-between);
+
     padding: 36px 0;
-    @include flex-center(space-between)
   }
+
   &__search {
     position: relative;
+    margin-left: 57px;
+    outline: none;
+    border: 1px solid #141414;
+    border-radius: 20px;
+    padding-left: 88px;
     width: 385px;
     height: 58px;
-    background: #000000;
-    border: 1px solid #141414;
     box-sizing: border-box;
-    border-radius: 20px;
-    outline: none;
-    color: #FFFFFF;
-    padding-left: 88px;
-    margin-left: 57px;
+    color: #fff;
+    background: #000;
+
     &::before {
-      position: absolute;
       content: '';
+      position: absolute;
+      z-index: 2;
       width: 24px;
       height: 24px;
-      background:url(../../assets/header/search.svg);
-      z-index: 2;
+      background: url('../../assets/header/search.svg') no-repeat center;
+      background-size: cover;
     }
   }
+
   &__link {
+    margin: 0 25px;
     font-weight: 500;
     font-size: 16px;
     line-height: 24px;
     color: rgba(255, 255, 255, 0.6);
-    margin: 0 25px;
     transition: 0.3s;
+
     &:hover {
-      color: #FFFFFF;
+      color: #fff;
     }
   }
+
   &__btn {
+    margin: 0 6px;
     font-weight: 600;
     font-size: 16px;
-    margin: 0 6px;
   }
 }

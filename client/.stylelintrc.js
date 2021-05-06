@@ -1,7 +1,7 @@
 module.exports = {
   plugins: [
-    'stylelint-scss',
     'stylelint-order',
+    'stylelint-scss',
     'stylelint-declaration-block-no-ignored-properties',
   ],
   rules: {
@@ -659,7 +659,7 @@ module.exports = {
     'selector-type-no-unknown': true,
     'shorthand-property-no-redundant-values': true,
     'string-no-newline': true,
-    'string-quotes': 'double',
+    'string-quotes': 'single',
     'time-min-milliseconds': 10,
     'unit-blacklist': ['ch', 'cm', 'ex', 'in', 'mm', 'pc', 'pt', 'q'],
     'unit-case': 'lower',

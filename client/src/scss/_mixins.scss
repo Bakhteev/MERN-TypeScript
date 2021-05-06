@@ -1,15 +1,15 @@
 @mixin position($abs, $top, $right, $bottom: auto, $left: auto) {
 	position: $abs;
-	top: $top;
-	right: $right;
-	bottom: $bottom;
 	left: $left;
+	right: $right;
+	top: $top;
+	bottom: $bottom;
 }
 
 @mixin flex-center($justify-value: center, $align-value: center) {
 	display: flex;
-	justify-content: $justify-value;
 	align-items: $align-value;
+	justify-content: $justify-value;
 }
 
 @mixin form-center($X: -50%, $Y: -50%) {
