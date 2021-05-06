@@ -4,12 +4,10 @@ import { Model } from 'mongoose'
 import { CreateCategoryDto } from '../category/dto/create-category.dto'
 import { CreateFilmDto } from './dto/create-film.dto'
 import { Author, AuthorDocument } from './schema/author.schema'
-import { Category, CategoryDocument } from '../category/schema/category.schema'
 import { Film, FilmDocument } from './schema/film.schema'
 import { CategoryService } from 'src/category/category.service'
 import { CreateGenreDto } from 'src/genre/dto/create-genre.dto'
 import { GenreService } from 'src/genre/genre.service'
-import { Express } from 'express'
 import { FilesService, FileType } from 'src/files/files.service'
 import { CreateActerDto } from 'src/acter/dto/create-acter.dto'
 import { ActerService } from 'src/acter/acter.service'
@@ -25,9 +23,67 @@ export class FilmsService {
     private acterService: ActerService
   ) {}
 
-  async getFilms() {
+  async getFilms(
+    page = 0,
+    limit = 10,
+    rating?: string,
+    mostLiked?: string,
+    mostViewed?: string
+  ) {
+    if (rating) {
+      const films = await this.filmModel
+        .find()
+        .skip(+page * +limit)
+        .limit(+limit)
+        .populate(['category', 'author', 'acters', 'genre'])
+      const filteredFilms = films.filter((film) => film.rating >= +rating)
+      return filteredFilms
+    }
+    if (mostLiked) {
+      const films = await this.filmModel
+        .find()
+        .skip(+page * +limit)
+        .limit(+limit)
+        .populate(['category', 'author', 'acters', 'genre'])
+      const filteredFilms = films.sort((a, b) => b.likes - a.likes)
+
+      return filteredFilms
+    }
+    if (rating && mostLiked) {
+      const films = await this.filmModel
+        .find()
+        .skip(+page * +limit)
+        .limit(+limit)
+        .populate(['category', 'author', 'acters', 'genre'])
+      const filteredFilms = films
+        .filter((film) => film.rating >= +rating)
+        .sort((a, b) => b.likes - a.likes)
+      return filteredFilms
+    }
+    if (mostViewed) {
+      const films = await this.filmModel
+        .find()
+        .skip(+page * +limit)
+        .limit(+limit)
+        .populate(['category', 'author', 'acters', 'genre'])
+      const filteredFilms = films.sort((a, b) => b.viewers - a.viewers)
+      return filteredFilms
+    }
+    if (rating && mostViewed) {
+      const films = await this.filmModel
+        .find()
+        .skip(+page * +limit)
+        .limit(+limit)
+        .populate(['category', 'author', 'acters', 'genre'])
+      const filteredFilms = films
+        .filter((film) => film.rating >= +rating)
+        .sort((a, b) => b.viewers - a.viewers)
+      return filteredFilms
+    }
     const films = await this.filmModel
       .find()
+      .skip(+page * +limit)
+      .limit(+limit)
       .populate(['category', 'author', 'acters', 'genre'])
     return films
   }

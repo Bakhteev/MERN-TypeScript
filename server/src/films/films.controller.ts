@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Post,
+  Query,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common'
@@ -23,8 +24,29 @@ export class FilmsController {
   constructor(private filmsService: FilmsService) {}
 
   @Get()
-  getFilms() {
-    return this.filmsService.getFilms()
+  getFilms(
+    @Query('page') page,
+    @Query('limit') limit,
+    @Query('rating') rating,
+    @Query('mostLiked') mostLiked,
+    @Query('mostViewed') mostViewed
+  ) {
+    if (rating) {
+      return this.filmsService.getFilms(page, limit, rating)
+    }
+    if (mostLiked) {
+      return this.filmsService.getFilms(page, limit, null, mostLiked)
+    }
+    if (mostViewed) {
+      return this.filmsService.getFilms(page, limit, '', '', mostViewed)
+    }
+    if (rating && mostLiked) {
+      return this.filmsService.getFilms(page, limit, rating, mostLiked)
+    }
+    if (rating && mostViewed) {
+      return this.filmsService.getFilms(page, limit, rating, '', mostViewed)
+    }
+    return this.filmsService.getFilms(page, limit)
   }
 
   @Post()
@@ -37,11 +59,6 @@ export class FilmsController {
   )
   createFilm(@UploadedFiles() files, @Body() dto: CreateFilmDto) {
     const { poster, film, authorPicture } = files
-
-    // const { poster } = files
-    console.log(dto)
-
-    console.log(files)
     return this.filmsService.createFilm(
       dto,
       poster[0],
