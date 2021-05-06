@@ -5,11 +5,7 @@ interface CreateTagsProps {
   setTags: Function
 }
 
-const CreateTags: React.FC<CreateTagsProps> = ({tags, setTags}) => {
-  const [timer, setTimer] = useState<any>()
-
-  console.log(tags)
-
+const CreateTags: React.FC<CreateTagsProps> = ({ tags, setTags }) => {
   const addTag = () => {
     setTags((prev: any) => [...prev, { name: '', number: Date.now() }])
   }
@@ -30,6 +26,7 @@ const CreateTags: React.FC<CreateTagsProps> = ({tags, setTags}) => {
       <button onClick={addTag}>добавить тэг</button>
       {tags.map((item: any) => (
         <input
+          key={item.number}
           type="text"
           onChange={(e) => changeHandler('name', item.number, e.target.value)}
         />

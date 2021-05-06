@@ -18,7 +18,7 @@ interface Author {
   picture: File | any
 }
 
-export const AdminTop: React.FC = () => {
+export const AdminPage: React.FC = () => {
   const [poster, setPoster] = useState<File | null>(null)
   const [film, setFilm] = useState<File | null>(null)
   const [author, setAuthor] = useState<Author>({ name: '', picture: [] })
