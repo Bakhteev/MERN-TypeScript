@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import * as path from 'path'
 import * as fs from 'fs'
 import * as uuid from 'uuid'
+import { Storage } from 'megajs'
 
 export enum FileType {
   VIDEO = 'video',
@@ -11,6 +12,11 @@ export enum FileType {
 @Injectable()
 export class FilesService {
   createFile(type: FileType, file: Express.Multer.File): string {
+    // let storage = new Storage(
+    //   { email: 'bakhteevb@gmail.com', password: 'battlefront200223' },
+    //   (err, files) => console.log(files)
+    // )
+
     try {
       const fileExtension = file.originalname.split('.').pop()
       const fileName = uuid.v4() + '.' + fileExtension
@@ -25,3 +31,4 @@ export class FilesService {
     }
   }
 }
+

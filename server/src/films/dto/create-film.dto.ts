@@ -12,17 +12,3 @@ export class CreateFilmDto {
   readonly time: string
 }
 
-// class cast {
-//   readonly role: string
-//   readonly acter: string
-//   readonly picture: any
-// }
-
-// class acter {
-//   readonly name: string
-// }
-
-// class author{
-//   readonly name: string
-//   readonly picture: []
-// }
