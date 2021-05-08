@@ -19,7 +19,7 @@ export class User {
   reviews: Review[]
 
   @Prop()
-  role: string
+  role: string[]
 
   @Prop({
     type: [

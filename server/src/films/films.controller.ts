@@ -7,16 +7,11 @@ import {
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common'
-import {
-  AnyFilesInterceptor,
-  FileFieldsInterceptor,
-} from '@nestjs/platform-express'
-import { CategoryService } from 'src/category/category.service'
+import { FileFieldsInterceptor } from '@nestjs/platform-express'
 import { CreateGenreDto } from 'src/genre/dto/create-genre.dto'
 import { CreateCategoryDto } from '../category/dto/create-category.dto'
 import { CreateFilmDto } from './dto/create-film.dto'
 import { FilmsService } from './films.service'
-import { Express } from 'express'
 import { CreateActerDto } from 'src/acter/dto/create-acter.dto'
 
 @Controller('films')

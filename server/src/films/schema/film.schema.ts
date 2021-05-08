@@ -4,7 +4,6 @@ import * as mongoose from 'mongoose'
 import { Category } from '../../category/schema/category.schema'
 import { Review } from 'src/user/schema/rewiew.schema'
 import { Author } from './author.schema'
-import { cast } from './interface'
 import { Genre } from 'src/genre/schema/genre.schema'
 import { Acter } from 'src/acter/schema/acter.schema'
 
