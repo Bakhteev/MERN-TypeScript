@@ -6,7 +6,7 @@ import {
   Route,
 } from 'react-router-dom'
 import { AdminPage } from './pages/admin/Admin'
-import HomePage from './pages/index/HomePage'
+import HomePage from './pages/home/HomePage'
 
 const App: React.FC = () => {
   return (

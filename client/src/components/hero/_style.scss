@@ -1,56 +1,63 @@
 .hero {
-  background: linear-gradient(90deg, #070707 13.01%, rgba(0, 0, 0, 0.69) 75.59%);
-  height: calc(100vh - 130px);
   display: flex;
   align-items: center;
+  height: calc(100vh - 130px);
+  background: linear-gradient(90deg, #070707 13.01%, rgba(0, 0, 0, 0.69) 75.59%);
+
   &__caption {
     .caption {
       &__item {
-        font-style: normal;
-        font-weight: normal;
+        margin-right: 25px;
+        font-weight: 400;
+        font-style: 400;
         font-size: 16px;
         line-height: 24px;
         color: rgba(255, 255, 255, 0.6);
-        margin-right: 25px;
+
         &:first-child {
-          color: #000F93;
+          color: #000f93;
         }
       }
     }
   }
+
   &__name {
-    font-family: 'Ruslan Display', 'sans-serif';
-    font-style: normal;
-    font-weight: normal;
+    padding: 40px 0;
+    font-family: 'Ruslan Display', sans-serif;
+    font-weight: 400;
+    font-style: 400;
     font-size: 81px;
     line-height: 88px;
     letter-spacing: -0.05em;
-    color: #FFFFFF;
-    text-shadow: 0px 11px 27px #000000;
-    padding: 40px 0;
+    text-shadow: 0 11px 27px #000;
+    color: #fff;
   }
+
   &__description {
-    font-style: normal;
-    font-weight: normal;
+    font-weight: 400;
+    font-style: 400;
     font-size: 16px;
     line-height: 24px;
     color: rgba(255, 255, 255, 0.8);
   }
+
   &__prices {
     align-items: center;
     padding: 40px 0;
+
     .prices {
       &__new {
-        font-style: normal;
+        margin-right: 15px;
         font-weight: 600;
+        font-style: 400;
         font-size: 32px;
         line-height: 48px;
         color: rgba(255, 255, 255, 0.8);
-        margin-right: 15px;
       }
+
       &__old {
-        font-style: normal;
-        font-weight: normal;
+        font-weight: 400;
+        font-style: 400;
         font-size: 18px;
         line-height: 27px;
         text-decoration-line: line-through;
@@ -58,36 +65,44 @@
       }
     }
   }
+
   &__btn {
+    margin-right: 20px;
     font-family: 'Poppins';
-    font-style: normal;
     font-weight: 600;
+    font-style: 400;
     font-size: 20px;
     line-height: 30px;
     transition: 0.3s;
-    margin-right: 20px;
+
     &:first-child:hover {
-      box-shadow: 0px 7px 42px rgba(0, 15, 147, 0.44);
+      box-shadow: 0 7px 42px rgba(0, 15, 147, 0.44);
     }
   }
+
   &__wrappers-row {
     position: relative;
+
     .wrapper {
       &__btn {
         @include form-center;
+
         width: 113px;
         height: 113px;
         background: url('../../assets/hero/btnPlay.svg');
       }
     }
   }
+
   &__wrapper {
+    border-radius: 20px;
     width: 368px;
     height: 516px;
-    background: #C4C4C4;
-    border-radius: 20px;
+    background: #c4c4c4;
+
     &-main {
       @include form-center;
+
       width: 504px;
       height: 708px;
     }
