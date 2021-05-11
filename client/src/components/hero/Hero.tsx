@@ -1,4 +1,5 @@
 import React from 'react'
+import RecentWatched from '../recentWatched/RecentWatched'
 
 const Hero: React.FC = () => {
   return (
@@ -33,6 +34,7 @@ const Hero: React.FC = () => {
             </div>
           </div>
         </div>
+        <RecentWatched />
       </div>
     </section>
   )
