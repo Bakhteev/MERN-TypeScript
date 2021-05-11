@@ -1,0 +1,45 @@
+.recentWatchedCard {
+  border-radius: 20px;
+  padding: 16px 20px;
+  box-sizing: border-box;
+  background: #080808;
+
+  &__img {
+    border-radius: 20px;
+    width: 142px;
+    height: 164px;
+    background: #c4c4c4;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    padding-left: 20px;
+  }
+
+  &__genre {
+    align-self: self-end;
+    border: 1px solid #000f93;
+    border-radius: 11px;
+    padding: 7px 12px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    color: #1328e3;
+    background: rgba(0, 15, 147, 0.12);
+  }
+
+  &__name {
+    padding: 20px 0 4px;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 27px;
+    color: #fff;
+  }
+
+  &__episode {
+    font-size: 14px;
+    line-height: 21px;
+    color: rgba(255, 255, 255, 0.6);
+  }
+}

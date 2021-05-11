@@ -1,6 +1,35 @@
-.recentWatchedCard {
-  border-radius: 20px;
-  width: '376px';
-  height: '376px';
-  background: rgba(0, 0, 0, 0.7);
+@import './recentWatchedCard/style';
+
+.recentWatched {
+  padding: 85px 0 20px;
+
+  &__title {
+    font-weight: 500;
+    font-style: normal;
+    font-size: 20px;
+    line-height: 30px;
+    color: #fff;
+  }
+
+  &__row {
+    padding: 30px 5px 0;
+  }
+}
+
+// ============= Swiper
+
+.swiper-button-prev,
+.swiper-button-next {
+  width: 24px;
+  height: 24px;
+  background: url('../../assets/hero/arrowBtn.svg');
+  background-repeat: no-repeat;
+
+  &::after {
+    display: none;
+  }
+}
+
+.swiper-button-next {
+  transform: rotate(180deg);
 }
