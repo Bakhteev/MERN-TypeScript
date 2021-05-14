@@ -15,6 +15,9 @@ export class User {
   @Prop()
   password: string
 
+  @Prop()
+  name: string
+
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }] })
   reviews: Review[]
 

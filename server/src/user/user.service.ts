@@ -5,12 +5,7 @@ import { CreateUserDto } from './dto/create-user.dto'
 import { User, UserDocument } from './schema/user.schema'
 import { JwtService } from '@nestjs/jwt'
 import * as bcrypt from 'bcrypt'
-
-// const generateJWT = (id, email, role) => {
-//   return jwt.sign({ id, email, role }, process.env.SECRET_KEY, {
-//     expiresIn: '24h',
-//   })
-// }
+import { Response } from 'express'
 
 @Injectable()
 export class UserService {
@@ -49,13 +44,16 @@ export class UserService {
 
       // console.log(hashedPassword)
 
+      const hashedPassword = await bcrypt.hash(password, 6)
+
       const newUser = await this.userModel.create({
         email,
-        password,
+        password: hashedPassword,
         role: ['USER'],
         name,
       })
       const token = this.generateJWT(newUser._id, newUser.email, newUser.role)
+      // await res.cookie('token', token, { httpOnly: true })
       return token
     } catch (e) {
       throw new HttpException(
