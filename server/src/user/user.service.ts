@@ -10,7 +10,6 @@ import { RolesService } from 'src/roles/roles.service'
 export class UserService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
-    private jwtService: JwtService,
     private rolesService: RolesService
   ) {}
 
@@ -23,8 +22,9 @@ export class UserService {
     const user = await this.userModel.findById(dto.userId)
     const role = await this.rolesService.getRoleByValue(dto.value)
     if (role && user) {
-      await user.$set('role', role.id)
-      return dto
+      user.roles = [role.value]
+      user.save()
+      return user
     }
     throw new HttpException(
       'Пользователь или роль не найдены',
@@ -44,6 +44,11 @@ export class UserService {
 
   async getUserByEmail(email: string) {
     const user = await this.userModel.findOne({ email })
+    return user
+  }
+
+  async getUserById(id: string) {
+    const user = await this.userModel.findById(id)
     return user
   }
 }

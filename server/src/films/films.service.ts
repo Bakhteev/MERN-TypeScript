@@ -11,6 +11,8 @@ import { GenreService } from 'src/genre/genre.service'
 import { FilesService, FileType } from 'src/files/files.service'
 import { CreateActerDto } from 'src/acter/dto/create-acter.dto'
 import { ActerService } from 'src/acter/acter.service'
+import { CreateRewiewDto } from '../review/dto/create-rewiew.dto'
+import { ReviewService } from 'src/review/review.service'
 
 @Injectable()
 export class FilmsService {
@@ -20,7 +22,8 @@ export class FilmsService {
     private categoryService: CategoryService,
     private genreService: GenreService,
     private filesService: FilesService,
-    private acterService: ActerService
+    private acterService: ActerService,
+    private reviewService: ReviewService,
   ) {}
 
   async getFilms(
@@ -86,6 +89,16 @@ export class FilmsService {
       .limit(+limit)
       .populate(['category', 'author', 'acters', 'genre'])
     return films
+  }
+
+  async getFilmById(id: string) {
+    const film = await this.filmModel
+      .findById(id)
+      .populate(['category', 'author', 'acters', 'genre', 'review'])
+    if (!film) {
+      throw new HttpException('Данный фильм не найден', HttpStatus.NOT_FOUND)
+    }
+    return film
   }
 
   async createFilm(
@@ -176,5 +189,9 @@ export class FilmsService {
 
   async createActer(dto: CreateActerDto, file: Express.Multer.File) {
     return this.acterService.createActer(dto, file)
+  }
+
+  async addRewiew(dto: CreateRewiewDto) {
+    return this.reviewService.createReview(dto)
   }
 }

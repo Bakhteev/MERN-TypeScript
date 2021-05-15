@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { forwardRef, Module } from '@nestjs/common'
 import { FilmsService } from './films.service'
 import { FilmsController } from './films.controller'
 import { MongooseModule } from '@nestjs/mongoose'
@@ -11,6 +11,7 @@ import { GenreService } from 'src/genre/genre.service'
 import { FilesService } from 'src/files/files.service'
 import { ActerService } from 'src/acter/acter.service'
 import { Acter, ActerSchema } from 'src/acter/schema/acter.schema'
+import { ReviewModule } from 'src/review/review.module'
 
 @Module({
   providers: [
@@ -29,6 +30,8 @@ import { Acter, ActerSchema } from 'src/acter/schema/acter.schema'
     ]),
     MongooseModule.forFeature([{ name: Acter.name, schema: ActerSchema }]),
     MongooseModule.forFeature([{ name: Genre.name, schema: GenreSchema }]),
+    forwardRef(() => ReviewModule),
   ],
+  exports: [FilmsService],
 })
 export class FilmsModule {}

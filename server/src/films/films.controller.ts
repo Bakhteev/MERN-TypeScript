@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Query,
   UploadedFiles,
@@ -13,6 +14,7 @@ import { CreateCategoryDto } from '../category/dto/create-category.dto'
 import { CreateFilmDto } from './dto/create-film.dto'
 import { FilmsService } from './films.service'
 import { CreateActerDto } from 'src/acter/dto/create-acter.dto'
+import { CreateRewiewDto } from '../review/dto/create-rewiew.dto'
 
 @Controller('films')
 export class FilmsController {
@@ -42,6 +44,11 @@ export class FilmsController {
       return this.filmsService.getFilms(page, limit, rating, '', mostViewed)
     }
     return this.filmsService.getFilms(page, limit)
+  }
+
+  @Get('/:id')
+  getFilmById(@Param() id: string) {
+    return this.filmsService.getFilmById(id)
   }
 
   @Post()
@@ -85,9 +92,12 @@ export class FilmsController {
   @Post('/acters')
   @UseInterceptors(FileFieldsInterceptor([{ name: 'picture', maxCount: 1 }]))
   createActers(@UploadedFiles() file, @Body() dto: CreateActerDto) {
-    console.log(dto)
-
     const { picture } = file
     return this.filmsService.createActer(dto, picture[0])
+  }
+
+  @Post('/rewiew')
+  addRewiew(@Body() dto: CreateRewiewDto) {
+    return this.filmsService.addRewiew(dto)
   }
 }

@@ -2,10 +2,10 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document } from 'mongoose'
 import * as mongoose from 'mongoose'
 import { Category } from '../../category/schema/category.schema'
-import { Review } from 'src/user/schema/rewiew.schema'
 import { Author } from './author.schema'
 import { Genre } from 'src/genre/schema/genre.schema'
 import { Acter } from 'src/acter/schema/acter.schema'
+import { Review } from 'src/review/schema/review.schema'
 
 export type FilmDocument = Film & Document
 
