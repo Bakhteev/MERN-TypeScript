@@ -1,9 +1,9 @@
 # MERN-TypeScript
 
-Frontend
-React 
-Redux
+**Frontend**<br>
+&nbsp;React<br>
+&nbsp;Redux<br>
 
-Backend
-Nest
-MongoDb
+**Backend**<br>
+&nbsp;Nest<br>
+&nbsp;MongoDb
