@@ -1,16 +1,30 @@
-import { Body, Controller, Post, Req, Res } from '@nestjs/common'
+import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UserService } from './user.service'
 import { Response } from 'express'
+import { Roles } from 'src/auth/roles.decorator'
+import { RolesGuard } from 'src/auth/roles.guard'
+import { AddRoleDto } from './dto/add-role.dto'
 
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
+  @Post()
+  create(@Body() userDto: CreateUserDto) {
+    return this.userService.createUser(userDto)
+  }
 
-  @Post('/registration')
-  registration(@Body() user: CreateUserDto, @Res() res: Response) {
-    return this.userService
-      .registration(user)
-      // .then((token) => res.cookie('token', token))
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
+  @Get()
+  getAll() {
+    return this.userService.getAllUsers()
+  }
+
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
+  @Post('/role')
+  addRole(@Body() dto: AddRoleDto) {
+    return this.userService.addRole(dto)
   }
 }

@@ -9,7 +9,7 @@ export type UserDocument = User & Document
 
 @Schema()
 export class User {
-  @Prop()
+  @Prop({ unique: true })
   email: string
 
   @Prop()
@@ -22,7 +22,7 @@ export class User {
   reviews: Review[]
 
   @Prop()
-  role: string[]
+  roles: string[]
 
   @Prop({
     type: [
