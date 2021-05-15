@@ -1,6 +1,4 @@
-export class CreateUserDto {
-  readonly name: string
+export class LogInUserDto {
   readonly email: string
   readonly password: string
 }
-
