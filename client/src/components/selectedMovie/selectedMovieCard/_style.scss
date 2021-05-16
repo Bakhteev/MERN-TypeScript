@@ -1,0 +1,28 @@
+.selectedMovieCard {
+  position: relative;
+  border-radius: 20px;
+  width: 265px;
+  height: 400px;
+  background: #c4c4c4;
+  cursor: pointer;
+
+  &-active {
+    position: absolute;
+    left: 50%;
+    z-index: 0;
+    display: none;
+    border-radius: 20px;
+    width: 285px;
+    height: 561px;
+    box-shadow: 0 17px 27px #000;
+    background: #fff;
+    transform: translateX(-50%);
+    transition: 0.2s;
+  }
+
+  &.active {
+    .selectedMovieCard-active {
+      display: block;
+    }
+  }
+}
