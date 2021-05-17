@@ -1,15 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 const SelectedMovieCard: React.FC = () => {
 
-  const sayHello = (el:any ): void => {
-    alert('Hello')
+  const [active, setActive] = useState(false)
+
+  const handleClick = () => {
+    setActive(active ? false : true)
   }
 
   return (
-    <div onMouseMove={sayHello} className="selectedMovieCard">
-      <img src="" alt="" />
-      <div className="selectedMovieCard-active">
+    <div onClick={handleClick} className="selectedMovieCard">
+      <img className="selectedMovieCard__img" src="" alt="" />
+      <div className={`selectedMovieCard-active ${active ? 'active' : ''}`}>
 
       </div>
     </div>
