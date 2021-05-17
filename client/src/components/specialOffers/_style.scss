@@ -1,0 +1,28 @@
+@import './specialOffersCard/style';
+
+.specialOffers {
+  height: 1216px;
+  background: url('../../assets/specialOffers/background.jpg') no-repeat;
+  background-size: cover;
+
+  &__head {
+    text-align: center;
+  }
+
+  &__title {
+    font-weight: 600;
+    font-style: normal;
+    font-size: 50px;
+    line-height: 75px;
+    color: #fff;
+  }
+
+  &__description {
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+    color: #fff;
+  }
+}
