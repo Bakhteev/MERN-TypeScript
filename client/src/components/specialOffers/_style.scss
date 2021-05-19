@@ -1,0 +1,58 @@
+@import './specialOffersCard/style';
+
+.specialOffers {
+  background: url('../../assets/specialOffers/background.jpg') no-repeat;
+  background-size: cover;
+
+  &__content {
+    position: relative;
+    padding: 92px 0 244px;
+  }
+
+  &__head {
+    text-align: center;
+  }
+
+  &__title {
+    font-weight: 600;
+    font-style: normal;
+    font-size: 50px;
+    line-height: 75px;
+    color: #fff;
+  }
+
+  &__description {
+    padding: 12px 0 72px;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+    color: #fff;
+  }
+
+  &__row {
+    justify-content: space-between;
+  }
+
+  & .swiper-button-next {
+    background: url('../../assets/specialOffers/btnSlider.svg') no-repeat center;
+  }
+
+  & .swiper-button-prev {
+    background: url('../../assets/specialOffers/btnPrevious.svg') no-repeat center;
+  }
+
+  // ============= Swiper ==================
+
+  & .swiper-button-prev,
+  & .swiper-button-next {
+    width: 100px;
+    height: 100px;
+    background-size: cover;
+
+    &::after {
+        display: none;
+    }
+  }
+}

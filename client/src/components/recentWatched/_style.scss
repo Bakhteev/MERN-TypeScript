@@ -14,22 +14,22 @@
   &__row {
     padding: 30px 5px 0;
   }
-}
 
-// ============= Swiper
+  & .swiper-button-next {
+    transform: rotate(180deg);
+    }
 
-.swiper-button-prev,
-.swiper-button-next {
+  // ============= Swiper ==================
+
+  & .swiper-button-prev,
+  & .swiper-button-next {
   width: 24px;
   height: 24px;
   background: url('../../assets/hero/arrowBtn.svg');
   background-repeat: no-repeat;
 
-  &::after {
-    display: none;
+    &::after {
+      display: none;
+    }
   }
-}
-
-.swiper-button-next {
-  transform: rotate(180deg);
 }

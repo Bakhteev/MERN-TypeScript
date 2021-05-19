@@ -17,7 +17,7 @@ const Header: React.FC = () => {
             />
           </label>
           <nav className="header__nav">
-            <ul className="header__list flex">
+            <ul className="header__list row">
               {links.map((link) => {
                 return (
                   <li key={link}>
@@ -30,6 +30,7 @@ const Header: React.FC = () => {
             </ul>
           </nav>
           <div className="header__buttons">
+            <button className="header__btn watchlist">Wathclist</button>
             <button className="header__btn btn-transparent">Sign in</button>
             <button className="header__btn btn-blue">Register</button>
           </div>

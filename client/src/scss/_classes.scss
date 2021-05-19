@@ -1,6 +1,6 @@
 .container {
   margin: 0 auto;
-  max-width: 1440px;
+  max-width: 1620px;
 }
 
 .row {
@@ -27,13 +27,18 @@
 
 .btn-blue,
 .btn-transparent {
-  border-radius: 20px;
-  padding: 17px 30px;
+  border-radius: 24px;
   color: #fff;
+}
+
+.btn-blue {
+  margin-left: 10px;
+  padding: 17px 38px;
   background: #000f93;
 }
 
 .btn-transparent {
   border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 17px 24px;
   background: transparent;
 }

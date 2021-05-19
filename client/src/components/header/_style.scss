@@ -24,11 +24,9 @@
     &::before {
       content: '';
       position: absolute;
-      z-index: 2;
       width: 24px;
       height: 24px;
-      background: url('../../assets/header/search.svg') no-repeat center;
-      background-size: cover;
+      background: url('../../assets/header/search.svg') no-repeat;
     }
   }
 
@@ -46,8 +44,30 @@
   }
 
   &__btn {
-    margin: 0 6px;
+    font-family: 'Poppins';
     font-weight: 600;
+    font-style: normal;
     font-size: 16px;
+
+    &.watchlist {
+      position: relative;
+      margin-right: 60px;
+      outline: none;
+      border: none;
+      font-style: normal;
+      line-height: 24px;
+      color: #fff;
+      background: transparent;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: -28px;
+        top: -1px;
+        width: 24px;
+        height: 24px;
+        background: url('../../assets/header/heart.svg') no-repeat;
+      }
+    }
   }
 }
