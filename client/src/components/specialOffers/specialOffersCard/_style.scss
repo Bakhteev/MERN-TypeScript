@@ -1,0 +1,110 @@
+.specialOffersCard {
+  border-radius: 20px;
+  width: 512px;
+  height: 673px;
+  box-shadow: 0 21px 32px rgba(0, 0, 0, 0.25);
+  background: #fff;
+
+  &__img {
+    border-radius: 20px 20px 0 0;
+    width: 100%;
+    height: 306px;
+    background: #c4c4c4;
+  }
+
+  &__info {
+    padding: 27px 30px 42px;
+  }
+
+  &__item {
+    margin-right: 10px;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    line-height: 24px;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  &__biography {
+    border-radius: 12px;
+    width: 102px;
+    height: 35px;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 14px;
+    line-height: 21px;
+    color: #000f93;
+    background: rgba(0, 15, 147, 0.05);
+  }
+
+  &__name {
+    display: block;
+    margin-top: 32px;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 30px;
+    color: #000;
+  }
+
+  &__description {
+    padding: 16px 0 26px;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    line-height: 24px;
+    color: rgba(0, 0, 0, 0.8);
+  }
+
+  &__btn {
+    &.watchnow {
+      border-radius: 20px;
+      width: 177px;
+      height: 70px;
+      font-family: 'Poppins';
+      font-weight: 600;
+      font-style: normal;
+      font-size: 20px;
+      line-height: 30px;
+      color: #fff;
+      background: #000f93;
+    }
+
+    &.watchlist {
+      margin-left: 14px;
+      width: 70px;
+      height: 70px;
+      background: url('../../../assets/specialOffers/watchlistBTN.svg') no-repeat;
+      transition: 0.1s;
+
+      &:hover {
+        transform: scale(1.02);
+        transition: 0.1s;
+      }
+    }
+  }
+
+  &__price {
+    margin-right: 16px;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 30px;
+    line-height: 24px;
+    color: #000f93;
+  }
+
+  &__price-old {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    text-decoration-line: line-through;
+    color: #636363;
+  }
+
+  &__row,
+  &__buttons,
+  &__prices {
+    align-items: center;
+    justify-content: space-between;
+  }
+}
