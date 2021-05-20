@@ -1,0 +1,88 @@
+.moviesOnSaleCard {
+  &__img {
+    position: relative;
+    border-radius: 20px;
+    width: 239px;
+    height: 336px;
+    background: #c4c4c4;
+  }
+
+  &__sale {
+    position: absolute;
+    top: 24px;
+    border-radius: 0 20px 20px 0;
+    padding: 10px 20px;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 26px;
+    line-height: 39px;
+    color: #fff;
+    background: #000f93;
+  }
+
+  &__name {
+    padding: 22px 0 6px;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 20px;
+    line-height: 30px;
+    color: #fff;
+  }
+
+  &__item {
+    padding-right: 18px;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    line-height: 24px;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  &__row {
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 12px;
+  }
+
+  &__rating {
+    position: relative;
+    width: 86px;
+    height: 36px;
+    background: url('../../../assets/moviesOnSale/rating.svg') no-repeat;
+    background-size: cover;
+
+    &-a {
+      @include form-center(0%);
+
+      font-weight: 600;
+      font-style: normal;
+      line-height: 24px;
+      color: #ffb800;
+    }
+  }
+
+  &__prices {
+    display: flex;
+    align-items: center;
+  }
+
+  &__price {
+    padding-right: 12px;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 20px;
+    line-height: 30px;
+    text-align: right;
+    color: #fff;
+
+    &-old {
+      font-weight: 300;
+      font-style: normal;
+      font-size: 14px;
+      line-height: 21px;
+      text-align: right;
+      text-decoration-line: line-through;
+      color: rgba(255, 255, 255, 0.35);
+    }
+  }
+}

@@ -5,6 +5,14 @@
     padding: 100px 0;
   }
 
+  &__title {
+    font-weight: 600;
+    font-style: normal;
+    font-size: 35px;
+    line-height: 52px;
+    color: #fff;
+  }
+
   &__film {
     margin: 0 19px;
     border-radius: 20px;

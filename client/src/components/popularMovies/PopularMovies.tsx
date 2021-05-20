@@ -7,7 +7,7 @@ const PopularMovies: React.FC = () => {
       <div className="container">
         <div className="popularMovies__content">
           <div className="popularMovies__head row">
-            <h2 className="popularMovies__">Popular Movies</h2>
+            <h2 className="popularMovies__title">Popular Movies</h2>
             <Link to='/movie' className="selectedMovie__btn">View More</Link>
           </div>
           <div className="popularMovies__row flex">

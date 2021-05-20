@@ -1,0 +1,21 @@
+@import './moviesOnSaleCard/style';
+
+.moviesOnSale {
+  background: #080808;
+
+  &__content {
+    padding: 108px 0;
+  }
+
+  &__title {
+    font-weight: 600;
+    font-style: normal;
+    font-size: 35px;
+    line-height: 52px;
+  }
+
+  &__row {
+    justify-content: space-between;
+    padding-top: 85px;
+  }
+}
