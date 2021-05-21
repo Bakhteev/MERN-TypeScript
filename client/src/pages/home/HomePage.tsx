@@ -5,6 +5,7 @@ import SelectedMovie from '../../components/selectedMovie/SelectedMovie'
 import PopularMovies from '../../components/popularMovies/PopularMovies'
 import SpecialOffers from '../../components/specialOffers/SpecialOffers'
 import MoviesOnSale from '../../components/moviesOnSale/MoviesOnSale'
+import TopFiveMovies from '../../components/topFiveMovies/TopFiveMovies'
 
 const HomePage: React.FC = () => {
   return (
@@ -15,6 +16,7 @@ const HomePage: React.FC = () => {
       <PopularMovies />
       <SpecialOffers />
       <MoviesOnSale />
+      <TopFiveMovies />
     </>
   )
 }

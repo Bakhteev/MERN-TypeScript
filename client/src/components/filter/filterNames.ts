@@ -1,0 +1,1 @@
+export const filterNames: string[] = ['All Genre', 'Action', 'Comedy', 'Drama', 'Horror', 'Romance', 'Kids']
