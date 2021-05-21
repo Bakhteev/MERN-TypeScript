@@ -1,0 +1,19 @@
+.filter {
+  &__item {
+    margin-left: 26px;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 20px;
+    line-height: 30px;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    &.active {
+      color: #fff;
+    }
+  }
+}

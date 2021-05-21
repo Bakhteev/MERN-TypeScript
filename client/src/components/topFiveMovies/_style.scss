@@ -1,0 +1,21 @@
+@import './topFiveMoviesCard/style';
+
+.topFiveMovies {
+  background: #080808;
+
+  &__content {
+    padding: 132px 0 98px;
+  }
+
+  &__row {
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__title {
+    font-weight: 400;
+    font-size: 35px;
+    line-height: 52px;
+    color: #fff;
+  }
+}
