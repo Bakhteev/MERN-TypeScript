@@ -1,4 +1,10 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
+import {
+  forwardRef,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+} from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { CreateCategoryDto } from '../category/dto/create-category.dto'
@@ -22,8 +28,7 @@ export class FilmsService {
     private categoryService: CategoryService,
     private genreService: GenreService,
     private filesService: FilesService,
-    private acterService: ActerService,
-    private reviewService: ReviewService,
+    private acterService: ActerService
   ) {}
 
   async getFilms(
@@ -38,7 +43,7 @@ export class FilmsService {
         .find()
         .skip(+page * +limit)
         .limit(+limit)
-        .populate(['category', 'author', 'acters', 'genre'])
+        .populate(['category', 'author', 'acters', 'genre', 'reviews'])
       const filteredFilms = films.filter((film) => film.rating >= +rating)
       return filteredFilms
     }
@@ -87,14 +92,14 @@ export class FilmsService {
       .find()
       .skip(+page * +limit)
       .limit(+limit)
-      .populate(['category', 'author', 'acters', 'genre'])
+      .populate(['category', 'author', 'acters', 'genre', 'reviews'])
     return films
   }
 
   async getFilmById(id: string) {
     const film = await this.filmModel
       .findById(id)
-      .populate(['category', 'author', 'acters', 'genre', 'review'])
+      .populate(['category', 'author', 'acters', 'genre', 'reviews'])
     if (!film) {
       throw new HttpException('Данный фильм не найден', HttpStatus.NOT_FOUND)
     }
@@ -191,7 +196,7 @@ export class FilmsService {
     return this.acterService.createActer(dto, file)
   }
 
-  async addRewiew(dto: CreateRewiewDto) {
-    return this.reviewService.createReview(dto)
-  }
+  // async addRewiew(dto: CreateRewiewDto) {
+  //   return this.reviewService.createReview(dto)
+  // }
 }

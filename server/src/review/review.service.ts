@@ -1,4 +1,10 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
+import {
+  forwardRef,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+} from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { FilmsService } from 'src/films/films.service'
@@ -11,10 +17,11 @@ export class ReviewService {
   constructor(
     @InjectModel(Review.name) private reviewSchema: Model<ReviewDocument>,
     private userService: UserService,
+    @Inject(forwardRef(() => FilmsService))
     private filmsService: FilmsService
   ) {}
 
-  async createReview(dto: CreateRewiewDto) {
+  async addReview(dto: CreateRewiewDto) {
     try {
       const film = await this.filmsService.getFilmById(dto.filmId)
       if (!film) {
@@ -27,6 +34,9 @@ export class ReviewService {
         user_id: user._id,
         film_id: film._id,
       })
+
+      film.reviews.push(review._id)
+      film.save()
       return review
     } catch (e) {
       throw new HttpException(e, HttpStatus.INTERNAL_SERVER_ERROR)

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { Global, Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 import { FilmsModule } from './films/films.module'
 import { UserModule } from './user/user.module'
@@ -9,7 +9,6 @@ import { ActerModule } from './acter/acter.module'
 import { AuthModule } from './auth/auth.module'
 import { RolesModule } from './roles/roles.module'
 import { ReviewModule } from './review/review.module'
-
 @Module({
   imports: [
     MongooseModule.forRoot(

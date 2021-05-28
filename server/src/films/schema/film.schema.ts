@@ -63,7 +63,7 @@ export class Film {
   tags: string[]
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }] })
-  rewiews: Review[]
+  reviews: Review[]
 }
 
 export const FilmSchema = SchemaFactory.createForClass(Film)

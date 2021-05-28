@@ -15,10 +15,14 @@ import { CreateFilmDto } from './dto/create-film.dto'
 import { FilmsService } from './films.service'
 import { CreateActerDto } from 'src/acter/dto/create-acter.dto'
 import { CreateRewiewDto } from '../review/dto/create-rewiew.dto'
+import { ReviewService } from 'src/review/review.service'
 
 @Controller('films')
 export class FilmsController {
-  constructor(private filmsService: FilmsService) {}
+  constructor(
+    private filmsService: FilmsService,
+    private reviewService: ReviewService
+  ) {}
 
   @Get()
   getFilms(
@@ -47,7 +51,7 @@ export class FilmsController {
   }
 
   @Get('/:id')
-  getFilmById(@Param() id: string) {
+  getFilmById(@Param('id') id: string) {
     return this.filmsService.getFilmById(id)
   }
 
@@ -96,8 +100,8 @@ export class FilmsController {
     return this.filmsService.createActer(dto, picture[0])
   }
 
-  @Post('/rewiew')
+  @Post('/review')
   addRewiew(@Body() dto: CreateRewiewDto) {
-    return this.filmsService.addRewiew(dto)
+    return this.reviewService.addReview(dto)
   }
 }

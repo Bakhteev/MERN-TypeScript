@@ -15,7 +15,8 @@ export class Review {
   user_id: User
 
   @Prop({
-    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Film' }],
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Film',
   })
   film_id: Film
 }
