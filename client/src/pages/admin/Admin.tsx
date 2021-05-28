@@ -39,6 +39,9 @@ export const AdminPage: React.FC = () => {
   useEffect(() => {
     getCategories().then((data) => setCategorys(data))
     getGenres().then((data) => setGenres(data))
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/films`)
+      .then((smt) => console.log(smt.data))
   }, [])
 
   const changeAuthor = (key: string, value: any) => {
