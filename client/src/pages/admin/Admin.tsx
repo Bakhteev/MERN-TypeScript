@@ -36,12 +36,14 @@ export const AdminPage: React.FC = () => {
   const language = useInput('')
   const publishDate = useInput('')
 
+  const [filmOne, setFilmOne] = useState<any>()
+
   useEffect(() => {
     getCategories().then((data) => setCategorys(data))
     getGenres().then((data) => setGenres(data))
     axios
-      .get(`${process.env.REACT_APP_API_URL}/films`)
-      .then((smt) => console.log(smt.data))
+      .get(`${process.env.REACT_APP_API_URL}/films?id=60b62737c6e04e0015a76199`)
+      .then((smt) => setFilmOne(smt.data))
   }, [])
 
   const changeAuthor = (key: string, value: any) => {
@@ -77,6 +79,8 @@ export const AdminPage: React.FC = () => {
     formData.append('film', !film ? '' : film)
     const fetchedFilm = await createfilm(formData)
   }
+
+  // console.log(filmOne)
 
   return (
     <div
@@ -157,6 +161,8 @@ export const AdminPage: React.FC = () => {
       <CreateTags tags={tags} setTags={setTags} />
       <input type="number" id="price" {...price} placeholder="введите цену" />
       <button onClick={postData}>отправить</button>
+
+      <video src={filmOne[0].film || ''} />
     </div>
   )
 }

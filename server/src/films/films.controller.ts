@@ -50,7 +50,7 @@ export class FilmsController {
     return this.filmsService.getFilms(page, limit)
   }
 
-  @Get('/:id')
+  @Get()
   getFilmById(@Param('id') id: string) {
     return this.filmsService.getFilmById(id)
   }
