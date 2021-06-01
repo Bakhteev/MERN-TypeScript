@@ -20,7 +20,6 @@ export class ActerService {
         acter.save()
         return acter
       }
-      console.log(file)
       const picture = this.filesService.createFile(FileType.POSTER, file)
       const newActer = this.acterModel.create({ ...dto, picture })
       return newActer

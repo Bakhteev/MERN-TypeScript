@@ -12,11 +12,6 @@ export enum FileType {
 @Injectable()
 export class FilesService {
   createFile(type: FileType, file: Express.Multer.File): string {
-    // let storage = new Storage(
-    //   { email: 'bakhteevb@gmail.com', password: 'battlefront200223' },
-    //   (err, files) => console.log(files)
-    // )
-
     try {
       const fileExtension = file.originalname.split('.').pop()
       const fileName = uuid.v4() + '.' + fileExtension
@@ -25,7 +20,7 @@ export class FilesService {
         fs.mkdirSync(filePath, { recursive: true })
       }
       fs.writeFileSync(path.resolve(filePath, fileName), file.buffer)
-      return type + '/' + fileName
+      return process.env.URL + '/' + type + '/' + fileName
     } catch (e) {
       throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR)
     }
