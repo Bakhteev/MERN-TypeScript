@@ -12,7 +12,8 @@ const App: React.FC = () => {
   return (
     <Router>
       <Switch>
-        <Route exact path="/admin" component={AdminPage} />
+        {/* <Route path="/admin" component={AdminPage} /> */}
+        <Route path="/admin/:page" component={AdminPage} />
         <Route exact path="/" component={HomePage} />
         <Redirect to="/" />
       </Switch>
