@@ -1,5 +1,6 @@
 .sidebar {
   position: fixed;
+  z-index: 10;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -70,10 +71,13 @@
         margin-left: 10px;
         white-space: nowrap;
       }
+
+      &.active {
+        padding-left: 10px;
+      }
     }
 
-    &:hover,
-    &.active {
+    &:hover {
       margin-left: 10px;
     }
   }

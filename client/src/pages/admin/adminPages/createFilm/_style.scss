@@ -1,0 +1,38 @@
+.admin {
+}
+
+.label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  border-radius: 10px;
+
+  &__input {
+    border: 1px solid #125599;
+    border-radius: 10px;
+    padding: 10px;
+    width: 100%;
+    background: transparent;
+    transition: 0.3s;
+
+    &:focus,
+    &.active {
+      border-color: #2d9bef;
+    }
+  }
+
+  &__placeholder {
+    position: absolute;
+    top: 5px;
+    margin-left: 10px;
+    background: #fff;
+    transition: 0.3s;
+  }
+
+  &.active {
+    .label__placeholder {
+      top: -16px;
+    }
+  }
+}

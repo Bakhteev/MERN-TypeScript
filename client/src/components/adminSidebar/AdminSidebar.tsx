@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import FilmIcon from './filmIcon'
 import GenreIcon from './genreIcon'
 import UsersIcon from './usersIcon'
@@ -51,9 +51,9 @@ const AdminSidebar = () => {
             key={item.id}
             onClick={() => setActive(item.id)}
           >
-            <Link to={item.link}>
+            <NavLink to={item.link} activeClassName="active">
               <i>{item.icon}</i> <span>{item.text}</span>
-            </Link>
+            </NavLink>
           </li>
         ))}
       </ul>
