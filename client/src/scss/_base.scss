@@ -28,6 +28,13 @@ button {
   cursor: pointer;
 }
 
+input,
+textarea {
+  outline: none;
+  border: none;
+  padding: 0;
+}
+
 a {
   display: inline-block;
   text-decoration: none;
