@@ -1,4 +1,7 @@
 .admin {
+  &__add-files-block {
+    margin-top: 20px;
+  }
 }
 
 .label {
@@ -8,11 +11,12 @@
   margin-top: 20px;
   border-radius: 10px;
 
-  &__input {
+  &__textfield {
     border: 1px solid #125599;
     border-radius: 10px;
     padding: 10px;
     width: 100%;
+    font-size: 12px;
     background: transparent;
     transition: 0.3s;
 
@@ -22,17 +26,48 @@
     }
   }
 
+  &__textarea {
+    resize: none;
+  }
+
   &__placeholder {
     position: absolute;
     top: 5px;
     margin-left: 10px;
     background: #fff;
     transition: 0.3s;
+
+    &.active {
+      top: -16px;
+    }
   }
 
   &.active {
     .label__placeholder {
       top: -16px;
+    }
+  }
+}
+
+.addfile {
+  align-items: center;
+  margin-right: 20px;
+
+  &__placeholder {
+    margin-right: 10px;
+    font-size: 18px;
+  }
+
+  &__btn {
+    border-radius: 16px;
+    padding: 10px 15px;
+    font-size: 16px;
+    color: #fff;
+    background: #4caf50;
+    transition: 0.3s;
+
+    &:hover {
+      background: #125599;
     }
   }
 }

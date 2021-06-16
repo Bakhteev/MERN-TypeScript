@@ -6,7 +6,8 @@ import DropDown from './dropDown'
 import CreateTags from './CreateTags'
 import { useInput } from '../../../../hooks/useInput'
 import './_style.scss'
-import AnimatedInput from './AnimatedInput'
+import AnimatedTextField from './AnimatedTextField'
+import AddFileButton from './addFileButton'
 interface Acters {
   role: string
   name: string
@@ -43,7 +44,7 @@ export const CreateFilm: React.FC = () => {
     actersPictures: [],
     authorPicture: '',
   })
-
+  console.log(author)
   const filmName = useInput('')
   const price = useInput('')
   const time = useInput('')
@@ -60,8 +61,18 @@ export const CreateFilm: React.FC = () => {
       .then((smt) => setFilmOne(smt.data))
   }, [])
 
-  const changeAuthor = (key: string, value: any) => {
-    setAuthor({ ...author, [key]: value })
+  const changeAuthorName = (e: any) => {
+    setAuthor({
+      ...author,
+      name: e.target.value,
+    })
+  }
+
+  const changeAuthorPicture = (file: File) => {
+    setAuthor({
+      ...author,
+      picture: file,
+    })
   }
 
   const chooseItem = (item: any, setState: Function) => {
@@ -116,76 +127,69 @@ export const CreateFilm: React.FC = () => {
       <h1>Создание фильма</h1>
       <div className="col-6">
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <AnimatedInput
+          <AnimatedTextField
             text="Название фильма"
             hook={{ ...filmName }}
             id={'1'}
+            type={'input'}
           />
-          <AnimatedInput text="Язык фильма" hook={{ ...language }} id={'2'} />
-          <AnimatedInput
+          <AnimatedTextField
+            text="Язык фильма"
+            hook={{ ...language }}
+            id={'2'}
+            type={'input'}
+          />
+          <AnimatedTextField
             text="Дата премьеры"
             hook={{ ...publishDate }}
             id={'3'}
+            type={'input'}
           />
-          <textarea
-            style={{ resize: 'none' }}
-            rows={10}
-            placeholder="Описание фильма"
-            value={description}
-            className=""
-            onChange={(e) => setDescription(e.target.value)}
-          ></textarea>
+          <AnimatedTextField
+            text="Описание фильма"
+            hook={{ value: description, onChange: setDescription }}
+            id={'4'}
+            type="textarea"
+          />
         </div>
-        <label htmlFor="poster" style={{ color: 'black' }}>
-          Poster
-          <input
-            type="file"
+        <div className="flex admin__add-files-block">
+          <AddFileButton
             id="poster"
-            placeholder="Poster"
+            placeholder="Постер фильма"
             name="poster"
-            onChange={(e) => {
-              setPoster(!e.target.files ? null : e.target.files[0])
-              showFile(e)
-            }}
+            accept=".png,.jpeg,.jpg,.webp"
+            addFileFunc={setPoster}
+            showFileFunc={showFile}
           />
-        </label>
-        <label htmlFor="film" style={{ color: 'black' }}>
-          Film
-          <input
-            type="file"
+          <AddFileButton
             id="film"
             name="film"
             placeholder="Film"
-            onChange={(e) => {
-              setFilm(!e.target.files ? null : e.target.files[0])
-              showFile(e)
-            }}
+            accept=".mp4, .webm, .avi, .mkv"
+            addFileFunc={setFilm}
+            showFileFunc={showFile}
           />
-        </label>
+        </div>
         <h2>Режиссер фильма</h2>
-        <label htmlFor="authorName">
-          <input
-            type="text"
+        <div className="flex" style={{ alignItems: 'center' }}>
+          <AnimatedTextField
             id="authorName"
-            placeholder="Имя автора"
-            onChange={(e) => changeAuthor('name', e.target.value)}
+            type="input"
+            text="Имя автора"
+            hook={{ value: author.name, onChange: changeAuthorName }}
+            name="name"
           />
-        </label>
-        <label
-          htmlFor="authorPicture"
-          style={{ display: 'flex', color: 'black' }}
-        >
-          Фото режиссера
-          <input
-            type="file"
-            id="authorPicture"
-            name="authorPicture"
-            onChange={(e) => {
-              changeAuthor('picture', !e.target.files ? '' : e.target.files[0])
-              showFile(e)
-            }}
-          />
-        </label>
+          <div style={{ margin: '20px 0 0 20px' }}>
+            <AddFileButton
+              id="authorPicture"
+              placeholder="Фото режиссера"
+              accept=".png,.jpeg,.jpg,.webp"
+              addFileFunc={changeAuthorPicture}
+              showFileFunc={showFile}
+              name="picture"
+            />
+          </div>
+        </div>
         <input type="text" id="time" {...time} />
         <DropDown
           items={categorys}
