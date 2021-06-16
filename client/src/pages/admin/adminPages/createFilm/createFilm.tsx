@@ -172,14 +172,17 @@ export const CreateFilm: React.FC = () => {
         </div>
         <h2>Режиссер фильма</h2>
         <div className="flex" style={{ alignItems: 'center' }}>
-          <AnimatedTextField
-            id="authorName"
-            type="input"
-            text="Имя автора"
-            hook={{ value: author.name, onChange: changeAuthorName }}
-            name="name"
-          />
-          <div style={{ margin: '20px 0 0 20px' }}>
+          <div style={{ flex: 1 }}>
+            <AnimatedTextField
+              id="authorName"
+              type="input"
+              text="Имя автора"
+              hook={{ value: author.name, onChange: changeAuthorName }}
+              name="name"
+            />
+          </div>
+
+          <div style={{ margin: '20px 0 0 20px', display: 'flex', flex: 1 }}>
             <AddFileButton
               id="authorPicture"
               placeholder="Фото режиссера"
