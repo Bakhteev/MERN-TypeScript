@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 interface Acters {
   role: string
@@ -14,6 +14,9 @@ interface CreateActersProps {
 
 const CreateActers: React.FC<CreateActersProps> = ({ setActersId }) => {
   const [acters, setActers] = useState<any>([])
+  const [active, setActive] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false)
+  const inputEl = useRef<HTMLInputElement>(null)
 
   const addActer = () => {
     setActers([
@@ -35,51 +38,85 @@ const CreateActers: React.FC<CreateActersProps> = ({ setActersId }) => {
   }
 
   const postActer = async (number: number | string) => {
+    setLoading(true)
     const acter = acters.filter((item: Acters) => item.number === number)
-
-    console.log(acter)
-
     const { role, picture, name } = acter[0]
-
-    console.log(role, picture, name)
-
     const formData = new FormData()
-
     formData.append('name', name)
     formData.append('role', role)
     formData.append('picture', picture)
-
-    console.log(formData)
-
     const { data } = await axios.post(
       'http://localhost:5000/films/acters',
       formData
     )
-    console.log(data)
     setActersId((prev: any) => [...prev, data._id])
+    setLoading(false)
   }
+
+  const handleChange = (e: any) => {
+    setActive(e.target.value !== '' ? true : false)
+  }
+
+  const handleClick = () => {
+    inputEl.current?.click()
+  }
+
   return (
     <>
       <button onClick={addActer}>добавить актера</button>
       {acters.map((acter: Acters) => (
-        <div key={acter.number} className="flex">
-          <label htmlFor={`role ${acter.number}`}>
-            <input
-              type="text"
-              id={`role ${acter.number}`}
-              onChange={(e) => changeInfo('role', e.target.value, acter.number)}
-            />
-          </label>
-          <label htmlFor={`name ${acter.number}`}>
-            <input
-              type="text"
-              id={`name ${acter.number}`}
-              onChange={(e) => changeInfo('name', e.target.value, acter.number)}
-            />
-          </label>
+        <div
+          key={acter.number}
+          className="flex"
+          style={{ justifyContent: 'space-between' }}
+        >
+          <div className="flex" style={{ flex: '66.66%', margin: '0 -10px' }}>
+            <label
+              htmlFor={`role ${acter.number}`}
+              className="createacters__label"
+            >
+              {/* <span
+              className={`createacters__placeholder ${active ? 'active' : ''}`}
+            >
+              Роль актера
+            </span> */}
+              <input
+                type="text"
+                placeholder="Роль актера"
+                className={`createacters__input ${active ? 'active' : ''}`}
+                id={`role ${acter.number}`}
+                onChange={(e) => {
+                  handleChange(e)
+                  changeInfo('role', e.target.value, acter.number)
+                }}
+              />
+            </label>
+            <label
+              htmlFor={`name ${acter.number}`}
+              className="createacters__label"
+            >
+              {/* <span
+              className={`createacters__placeholder ${active ? 'active' : ''}`}
+            >
+              Имя актера
+            </span> */}
+              <input
+                type="text"
+                placeholder="Имя актера"
+                className={`createacters__input ${active ? 'active' : ''}`}
+                id={`name ${acter.number}`}
+                onChange={(e) => {
+                  handleChange(e)
+                  changeInfo('name', e.target.value, acter.number)
+                }}
+              />
+            </label>
+          </div>
           <label htmlFor={`picture ${acter.number}`}>
             <input
               type="file"
+              ref={inputEl}
+              style={{ display: 'none' }}
               id={`picture ${acter.number}`}
               onChange={(e) =>
                 changeInfo(
@@ -89,8 +126,27 @@ const CreateActers: React.FC<CreateActersProps> = ({ setActersId }) => {
                 )
               }
             />
+            <button
+              className="btn"
+              onClick={handleClick}
+              style={{ marginLeft: 10 }}
+              disabled={loading}
+            >
+              Добавить фото
+            </button>
           </label>
-          <button onClick={() => postActer(acter.number)}>Загрузить</button>
+
+          <button
+            className="btn btn--blue"
+            onClick={() => postActer(acter.number)}
+            style={{ marginLeft: 10 }}
+            disabled={loading}
+            // acters.filter((item: any) => item.number === acter.number)[0] ===
+            //   acter.number
+          >
+            Загрузить
+          </button>
+          {loading ? <div className="loading"></div> : ''}
         </div>
       ))}
     </>
