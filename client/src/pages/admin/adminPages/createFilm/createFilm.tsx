@@ -44,7 +44,6 @@ export const CreateFilm: React.FC = () => {
     actersPictures: [],
     authorPicture: '',
   })
-  console.log(author)
   const filmName = useInput('')
   const price = useInput('')
   const time = useInput('')
@@ -205,7 +204,7 @@ export const CreateFilm: React.FC = () => {
           </div>
         </div>
         <input type="text" id="time" {...time} />
-        <div className="flex">
+        <div className="flex" style={{margin:'0 -10px'}}>
           <DropDown
             items={categorys}
             keyWord={'Категорию'}
