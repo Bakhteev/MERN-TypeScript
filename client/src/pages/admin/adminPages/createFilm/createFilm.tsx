@@ -126,31 +126,42 @@ export const CreateFilm: React.FC = () => {
     >
       <h1>Создание фильма</h1>
       <div className="col-6">
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <AnimatedTextField
-            text="Название фильма"
-            hook={{ ...filmName }}
-            id={'1'}
-            type={'input'}
-          />
-          <AnimatedTextField
-            text="Язык фильма"
-            hook={{ ...language }}
-            id={'2'}
-            type={'input'}
-          />
-          <AnimatedTextField
-            text="Дата премьеры"
-            hook={{ ...publishDate }}
-            id={'3'}
-            type={'input'}
-          />
-          <AnimatedTextField
-            text="Описание фильма"
-            hook={{ value: description, onChange: setDescription }}
-            id={'4'}
-            type="textarea"
-          />
+        <div style={{ display: 'flex' }}>
+          <div
+            style={{
+              display: 'flex',
+              flex: 1,
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+            }}
+          >
+            <AnimatedTextField
+              text="Название фильма"
+              hook={{ ...filmName }}
+              id={'1'}
+              type={'input'}
+            />
+            <AnimatedTextField
+              text="Язык фильма"
+              hook={{ ...language }}
+              id={'2'}
+              type={'input'}
+            />
+            <AnimatedTextField
+              text="Дата премьеры"
+              hook={{ ...publishDate }}
+              id={'3'}
+              type={'input'}
+            />
+          </div>
+          <div style={{ flex: 1, marginLeft: 20 }}>
+            <AnimatedTextField
+              text="Описание фильма"
+              hook={{ value: description, onChange: setDescription }}
+              id={'4'}
+              type="textarea"
+            />
+          </div>
         </div>
         <div className="flex admin__add-files-block">
           <AddFileButton
@@ -182,7 +193,7 @@ export const CreateFilm: React.FC = () => {
             />
           </div>
 
-          <div style={{ margin: '20px 0 0 20px', display: 'flex', flex: 1 }}>
+          <div style={{ marginLeft: '20px', display: 'flex', flex: 1 }}>
             <AddFileButton
               id="authorPicture"
               placeholder="Фото режиссера"
@@ -194,18 +205,23 @@ export const CreateFilm: React.FC = () => {
           </div>
         </div>
         <input type="text" id="time" {...time} />
-        <DropDown
-          items={categorys}
-          keyWord={'Категорию'}
-          chooseItem={chooseItem}
-          setState={setChoosedCategorys}
-        />
-        <DropDown
-          items={genres}
-          keyWord={'Жанр'}
-          chooseItem={chooseItem}
-          setState={setChoosedGenres}
-        />
+        <div className="flex">
+          <DropDown
+            items={categorys}
+            keyWord={'Категорию'}
+            chooseItem={chooseItem}
+            setState={setChoosedCategorys}
+            state={choosedCategorys}
+          />
+          <DropDown
+            items={genres}
+            keyWord={'Жанр'}
+            chooseItem={chooseItem}
+            setState={setChoosedGenres}
+            state={choosedGenres}
+          />
+        </div>
+
         <CreateActers setActersId={setActersId} />
         <CreateTags tags={tags} setTags={setTags} />
         <input type="number" id="price" {...price} placeholder="введите цену" />
