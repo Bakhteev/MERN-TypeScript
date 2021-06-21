@@ -1,0 +1,30 @@
+MERN-TS-Frontend:
+  ☐ Index-page
+    ☐ top-5-movie
+    ☐ sponsors
+    ☐ footer
+  ☐ Films-List-page
+    ☐ Films-LIst
+    ☐ SideBar
+    ☐ Pagination
+  ☐ Film-page
+    ☐ Sidebar
+    ☐ Main-info
+  ☐ Bascket-page
+  ☐ User-Page
+  ☐ Admin-page
+
+MERN-TS-Backend:
+  ☐ Films-Service
+    ✔ add-Like @done(21-06-21 18:49)
+      ☐ should-fix-one-user-can-like-once
+    ☐ add-rewiew
+    ✔ add-Dislike @done(21-06-21 19:00)
+      ☐ should-fix-one-user-can-dislike-once
+    ✔ add-view @done(21-06-21 16:31)
+      ✔ add-history @done(21-06-21 19:03)
+      ☐ should-fix-one-user-can-view-once?
+    ✔ add-rating @done(21-06-21 19:08)
+      ☐ should-fix-one-user-can-rate-once
+      ☐ User-Service
+    ☐ Fix-Creation-of-User

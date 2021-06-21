@@ -5,6 +5,7 @@ import { CreateUserDto } from './dto/create-user.dto'
 import { User, UserDocument } from './schema/user.schema'
 import { JwtService } from '@nestjs/jwt'
 import { RolesService } from 'src/roles/roles.service'
+import { Film, FilmDocument } from 'src/films/schema/film.schema'
 
 @Injectable()
 export class UserService {
@@ -34,8 +35,9 @@ export class UserService {
 
   async createUser(dto: CreateUserDto) {
     const user = await this.userModel.create(dto)
-    const role = await this.rolesService.getRoleByValue('ADMIN')
+    const role = await this.rolesService.getRoleByValue('USER')
     user.roles = [role.value]
+
     role.users.push(user._id)
     user.save()
     role.save()
@@ -49,6 +51,30 @@ export class UserService {
 
   async getUserById(id: string) {
     const user = await this.userModel.findById(id)
+    return user
+  }
+
+  async addToLikedMovies(userId: string, film: FilmDocument) {
+    const user = await this.getUserById(userId)
+
+    if (!user) {
+      throw new HttpException('Пользователь не найден', HttpStatus.NOT_FOUND)
+    }
+
+    user.liked.push(film._id)
+    user.save()
+    return user
+  }
+  
+  async addFilmToHistory(userId: string, film: FilmDocument) {
+    const user = await this.getUserById(userId)
+
+    if (!user) {
+      throw new HttpException('Пользователь не найден', HttpStatus.NOT_FOUND)
+    }
+
+    user.history.push(film._id)
+    user.save()
     return user
   }
 }

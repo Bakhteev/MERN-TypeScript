@@ -5,7 +5,10 @@ import {
   Param,
   Post,
   Query,
+  Req,
+  Res,
   UploadedFiles,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common'
 import { FileFieldsInterceptor } from '@nestjs/platform-express'
@@ -16,6 +19,10 @@ import { FilmsService } from './films.service'
 import { CreateActerDto } from 'src/acter/dto/create-acter.dto'
 import { CreateRewiewDto } from '../review/dto/create-rewiew.dto'
 import { ReviewService } from 'src/review/review.service'
+import { AddRatingDto } from './dto/add-rating.dto'
+import { RolesGuard } from 'src/auth/roles.guard'
+import { Roles } from 'src/auth/roles.decorator'
+import { Response, Request } from 'express'
 
 @Controller('films')
 export class FilmsController {
@@ -100,6 +107,36 @@ export class FilmsController {
     return this.filmsService.createActer(dto, picture[0])
   }
 
+  @Roles('USER')
+  @UseGuards(RolesGuard)
+  @Post('/like')
+  addLike(@Query('filmId') filmId: string, @Req() req: any) {
+    return this.filmsService.addLike(filmId, req.user.id)
+  }
+
+  @Roles('USER')
+  @UseGuards(RolesGuard)
+  @Post('/dislike')
+  addDislike(@Query('filmId') filmId: string) {
+    return this.filmsService.addDislike(filmId)
+  }
+
+  @Roles('USER')
+  @UseGuards(RolesGuard)
+  @Post('/view')
+  addView(@Query('filmId') filmId: string, @Req() req: any) {
+    return this.filmsService.addView(filmId, req.user.id)
+  }
+
+  @Roles('USER')
+  @UseGuards(RolesGuard)
+  @Post('/rating')
+  addRating(@Body() dto: AddRatingDto) {
+    return this.filmsService.addRating(dto)
+  }
+
+  @Roles('USER')
+  @UseGuards(RolesGuard)
   @Post('/review')
   addRewiew(@Body() dto: CreateRewiewDto) {
     return this.reviewService.addReview(dto)

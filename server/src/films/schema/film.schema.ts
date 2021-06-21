@@ -45,6 +45,9 @@ export class Film {
   price: number
 
   @Prop()
+  numberOfVoters: number
+
+  @Prop()
   rating: number
 
   @Prop()

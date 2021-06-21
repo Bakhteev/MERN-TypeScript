@@ -24,17 +24,14 @@ export class User {
   roles: string[]
 
   @Prop({
-    type: [
-      { type: mongoose.Schema.Types.ObjectId, ref: 'Film' },
-      { type: mongoose.Schema.Types.ObjectId, ref: 'Serial' },
-    ],
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Film' }],
   })
   liked: Film[]
 
   @Prop({
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Film' }],
   })
-  disliked: Film[]
+  history: Film[]
 }
 
 export const UserSchema = SchemaFactory.createForClass(User)
