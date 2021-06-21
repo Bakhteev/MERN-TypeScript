@@ -19,6 +19,8 @@ import { CreateActerDto } from 'src/acter/dto/create-acter.dto'
 import { ActerService } from 'src/acter/acter.service'
 import { CreateRewiewDto } from '../review/dto/create-rewiew.dto'
 import { ReviewService } from 'src/review/review.service'
+import { AddRatingDto } from './dto/add-rating.dto'
+import { UserService } from 'src/user/user.service'
 
 @Injectable()
 export class FilmsService {
@@ -28,7 +30,8 @@ export class FilmsService {
     private categoryService: CategoryService,
     private genreService: GenreService,
     private filesService: FilesService,
-    private acterService: ActerService
+    private acterService: ActerService,
+    private userService: UserService
   ) {}
 
   async getFilms(
@@ -190,6 +193,66 @@ export class FilmsService {
 
   async createGenre(dto: CreateGenreDto) {
     return this.genreService.createGenre(dto)
+  }
+
+  async addLike(filmId: string, id: string) {
+    const film = await this.filmModel.findById(filmId)
+    if (!film) {
+      throw new HttpException('Фильм не найден', HttpStatus.BAD_REQUEST)
+    }
+
+    film.likes += 1
+    film.save()
+    await this.userService.addToLikedMovies(id, film)
+    return film
+  }
+
+  async addDislike(filmId: string) {
+    const film = await this.filmModel.findById(filmId)
+    if (!film) {
+      throw new HttpException('Фильм не найден', HttpStatus.BAD_REQUEST)
+    }
+
+    film.dislikes += 1
+    film.save()
+    return film
+  }
+
+  async addView(filmId: string, userId: string) {
+    const film = await this.filmModel.findById(filmId)
+    if (!film) {
+      throw new HttpException('Фильм не найден', HttpStatus.BAD_REQUEST)
+    }
+
+    film.viewers += 1
+    film.save()
+    await this.userService.addFilmToHistory(userId, film)
+    return film
+  }
+
+  async addRating(dto: AddRatingDto) {
+    const { film_id, rating } = dto
+    const film = await this.filmModel.findById(film_id)
+    if (!film) {
+      throw new HttpException('Фильм не найден', HttpStatus.BAD_REQUEST)
+    }
+
+    if (film.numberOfVoters === 0 && film.rating === 0) {
+      film.numberOfVoters += 1
+      film.rating = Number(rating)
+
+      film.save()
+      return film
+    }
+
+    film.numberOfVoters += 1
+    film.rating =
+      (film.rating * (film.numberOfVoters - 1) + Number(rating)) /
+      film.numberOfVoters
+
+    film.rating = Number(film.rating.toFixed(1))
+    film.save()
+    return film
   }
 
   async createActer(dto: CreateActerDto, file: Express.Multer.File) {

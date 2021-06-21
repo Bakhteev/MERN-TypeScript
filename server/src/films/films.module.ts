@@ -12,6 +12,8 @@ import { FilesService } from 'src/files/files.service'
 import { ActerService } from 'src/acter/acter.service'
 import { Acter, ActerSchema } from 'src/acter/schema/acter.schema'
 import { ReviewModule } from 'src/review/review.module'
+import { JwtModule } from '@nestjs/jwt'
+import { UserModule } from 'src/user/user.module'
 
 @Module({
   providers: [
@@ -31,7 +33,14 @@ import { ReviewModule } from 'src/review/review.module'
     MongooseModule.forFeature([{ name: Acter.name, schema: ActerSchema }]),
     MongooseModule.forFeature([{ name: Genre.name, schema: GenreSchema }]),
     forwardRef(() => ReviewModule),
+    JwtModule.register({
+      secret: process.env.SECRET_KEY || 'SECRET',
+      signOptions: {
+        expiresIn: '24h',
+      },
+    }),
+    UserModule
   ],
-  exports: [FilmsService],
+  exports: [FilmsService, JwtModule],
 })
 export class FilmsModule {}
