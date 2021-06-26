@@ -160,6 +160,9 @@ export class FilmsService {
         film: filmPath,
       })
 
+      const likeId = await this.likesService.createLikeTable(newFilm._id)
+      newFilm.likesShema = likeId
+
       if (author) {
         author.film_and_serials.push(newFilm._id)
         newFilm.author = author._id
@@ -207,10 +210,9 @@ export class FilmsService {
 
     const liked = await this.likesService.addLike(filmId, userId)
 
-
     if (!liked) {
       await this.likesService.removeLike(filmId, userId)
-      
+
       film.likes -= 1
       film.save()
       await this.userService.removeFromLikedMovies(userId, film._id)
