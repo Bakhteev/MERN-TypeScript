@@ -23,6 +23,7 @@ import { AddRatingDto } from './dto/add-rating.dto'
 import { RolesGuard } from 'src/auth/roles.guard'
 import { Roles } from 'src/auth/roles.decorator'
 import { Response, Request } from 'express'
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
 
 @Controller('films')
 export class FilmsController {
@@ -62,6 +63,8 @@ export class FilmsController {
     return this.filmsService.getFilmById(id)
   }
 
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
   @Post()
   @UseInterceptors(
     FileFieldsInterceptor([
@@ -85,11 +88,15 @@ export class FilmsController {
     return this.filmsService.getCategories()
   }
 
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
   @Post('/category')
   createCategory(@Body() dto: CreateCategoryDto) {
     return this.filmsService.createCategory(dto)
   }
 
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
   @Post('/genre')
   createGenre(@Body() dto: CreateGenreDto) {
     return this.filmsService.createGenre(dto)
@@ -100,6 +107,8 @@ export class FilmsController {
     return this.filmsService.getGenres()
   }
 
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
   @Post('/acters')
   @UseInterceptors(FileFieldsInterceptor([{ name: 'picture', maxCount: 1 }]))
   createActers(@UploadedFiles() file, @Body() dto: CreateActerDto) {
@@ -107,38 +116,33 @@ export class FilmsController {
     return this.filmsService.createActer(dto, picture[0])
   }
 
-  @Roles('USER')
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard)
   @Post('/like')
   addLike(@Query('filmId') filmId: string, @Req() req: any) {
     return this.filmsService.addLike(filmId, req.user.id)
   }
 
-  @Roles('USER')
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard)
   @Post('/dislike')
   addDislike(@Query('filmId') filmId: string) {
     return this.filmsService.addDislike(filmId)
   }
 
-  @Roles('USER')
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard)
   @Post('/view')
   addView(@Query('filmId') filmId: string, @Req() req: any) {
     return this.filmsService.addView(filmId, req.user.id)
   }
 
-  @Roles('USER')
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard)
   @Post('/rating')
   addRating(@Body() dto: AddRatingDto) {
     return this.filmsService.addRating(dto)
   }
 
-  @Roles('USER')
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard)
   @Post('/review')
-  addRewiew(@Body() dto: CreateRewiewDto) {
-    return this.reviewService.addReview(dto)
+  addRewiew(@Body() dto: CreateRewiewDto, @Req() req: any) {
+    return this.reviewService.addReview(dto, req.user.id)
   }
 }

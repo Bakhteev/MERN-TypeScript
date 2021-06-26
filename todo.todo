@@ -17,8 +17,8 @@ MERN-TS-Frontend:
 MERN-TS-Backend:
   ☐ Films-Service
     ✔ add-Like @done(21-06-21 18:49)
-      ☐ should-fix-one-user-can-like-once
-    ☐ add-rewiew
+      ✔ should-fix-one-user-can-like-once @done(21-06-26 21:05)
+    ✔ add-rewiew @done(21-06-26 15:53)
     ✔ add-Dislike @done(21-06-21 19:00)
       ☐ should-fix-one-user-can-dislike-once
     ✔ add-view @done(21-06-21 16:31)
@@ -26,5 +26,5 @@ MERN-TS-Backend:
       ☐ should-fix-one-user-can-view-once?
     ✔ add-rating @done(21-06-21 19:08)
       ☐ should-fix-one-user-can-rate-once
-      ☐ User-Service
+  ☐ User-Service
     ☐ Fix-Creation-of-User

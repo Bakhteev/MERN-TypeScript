@@ -21,6 +21,8 @@ import { CreateRewiewDto } from '../review/dto/create-rewiew.dto'
 import { ReviewService } from 'src/review/review.service'
 import { AddRatingDto } from './dto/add-rating.dto'
 import { UserService } from 'src/user/user.service'
+import { LikesService } from 'src/likes/likes.service'
+import { UserDocument } from 'src/user/schema/user.schema'
 
 @Injectable()
 export class FilmsService {
@@ -31,7 +33,9 @@ export class FilmsService {
     private genreService: GenreService,
     private filesService: FilesService,
     private acterService: ActerService,
-    private userService: UserService
+    private userService: UserService,
+    private reviewService: ReviewService,
+    private likesService: LikesService
   ) {}
 
   async getFilms(
@@ -46,7 +50,7 @@ export class FilmsService {
         .find()
         .skip(+page * +limit)
         .limit(+limit)
-        .populate(['category', 'author', 'acters', 'genre', 'reviews'])
+        .populate(['category', 'genre'])
       const filteredFilms = films.filter((film) => film.rating >= +rating)
       return filteredFilms
     }
@@ -55,7 +59,7 @@ export class FilmsService {
         .find()
         .skip(+page * +limit)
         .limit(+limit)
-        .populate(['category', 'author', 'acters', 'genre'])
+        .populate(['category', 'genre'])
       const filteredFilms = films.sort((a, b) => b.likes - a.likes)
 
       return filteredFilms
@@ -65,7 +69,7 @@ export class FilmsService {
         .find()
         .skip(+page * +limit)
         .limit(+limit)
-        .populate(['category', 'author', 'acters', 'genre'])
+        .populate(['category', 'genre'])
       const filteredFilms = films
         .filter((film) => film.rating >= +rating)
         .sort((a, b) => b.likes - a.likes)
@@ -76,7 +80,7 @@ export class FilmsService {
         .find()
         .skip(+page * +limit)
         .limit(+limit)
-        .populate(['category', 'author', 'acters', 'genre'])
+        .populate(['category', 'genre'])
       const filteredFilms = films.sort((a, b) => b.viewers - a.viewers)
       return filteredFilms
     }
@@ -85,7 +89,7 @@ export class FilmsService {
         .find()
         .skip(+page * +limit)
         .limit(+limit)
-        .populate(['category', 'author', 'acters', 'genre'])
+        .populate(['category', 'genre'])
       const filteredFilms = films
         .filter((film) => film.rating >= +rating)
         .sort((a, b) => b.viewers - a.viewers)
@@ -95,7 +99,7 @@ export class FilmsService {
       .find()
       .skip(+page * +limit)
       .limit(+limit)
-      .populate(['category', 'author', 'acters', 'genre', 'reviews'])
+      .populate(['category', 'genre'])
     return films
   }
 
@@ -195,15 +199,27 @@ export class FilmsService {
     return this.genreService.createGenre(dto)
   }
 
-  async addLike(filmId: string, id: string) {
+  async addLike(filmId: string, userId: string) {
     const film = await this.filmModel.findById(filmId)
     if (!film) {
       throw new HttpException('Фильм не найден', HttpStatus.BAD_REQUEST)
     }
 
+    const liked = await this.likesService.addLike(filmId, userId)
+
+
+    if (!liked) {
+      await this.likesService.removeLike(filmId, userId)
+      
+      film.likes -= 1
+      film.save()
+      await this.userService.removeFromLikedMovies(userId, film._id)
+      return film
+    }
+
     film.likes += 1
     film.save()
-    await this.userService.addToLikedMovies(id, film)
+    await this.userService.addToLikedMovies(userId, film)
     return film
   }
 
@@ -226,7 +242,7 @@ export class FilmsService {
 
     film.viewers += 1
     film.save()
-    await this.userService.addFilmToHistory(userId, film)
+    await this.userService.addFilmToHistory(userId, film._id)
     return film
   }
 
@@ -259,7 +275,7 @@ export class FilmsService {
     return this.acterService.createActer(dto, file)
   }
 
-  // async addRewiew(dto: CreateRewiewDto) {
-  //   return this.reviewService.createReview(dto)
-  // }
+  async addRewiew(dto: CreateRewiewDto, userId: string) {
+    return this.reviewService.addReview(dto, userId)
+  }
 }

@@ -6,6 +6,8 @@ import { Author } from './author.schema'
 import { Genre } from 'src/genre/schema/genre.schema'
 import { Acter } from 'src/acter/schema/acter.schema'
 import { Review } from 'src/review/schema/review.schema'
+import { Like } from 'src/likes/schema/likes.shema'
+import { Dislike } from 'src/dislikes/schema/dislikes.shema'
 
 export type FilmDocument = Film & Document
 
@@ -56,8 +58,14 @@ export class Film {
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category' }] })
   category: Category[]
 
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Like' })
+  private likesShema: Like
+
   @Prop()
   likes: number
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Dislike' })
+  private dislikesShema: Dislike
 
   @Prop()
   dislikes: number
