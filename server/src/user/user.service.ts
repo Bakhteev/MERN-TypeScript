@@ -3,9 +3,9 @@ import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { CreateUserDto } from './dto/create-user.dto'
 import { User, UserDocument } from './schema/user.schema'
-import { JwtService } from '@nestjs/jwt'
 import { RolesService } from 'src/roles/roles.service'
-import { Film, FilmDocument } from 'src/films/schema/film.schema'
+import { FilmDocument } from 'src/films/schema/film.schema'
+import { AddRoleDto } from './dto/add-role.dto'
 
 @Injectable()
 export class UserService {
@@ -19,7 +19,7 @@ export class UserService {
     return users
   }
 
-  async addRole(dto: any) {
+  async addRole(dto: AddRoleDto) {
     const user = await this.userModel.findById(dto.userId)
     const role = await this.rolesService.getRoleByValue(dto.value)
     if (role && user) {
@@ -37,6 +37,7 @@ export class UserService {
     const user = await this.userModel.create(dto)
     const role = await this.rolesService.getRoleByValue('USER')
     user.roles = [role.value]
+    user.date_of_registry = Date.now()
 
     role.users.push(user._id)
     user.save()
@@ -54,26 +55,47 @@ export class UserService {
     return user
   }
 
-  async addToLikedMovies(userId: string, film: FilmDocument) {
+  async addToLikedMovies(userId: string, filmId: FilmDocument) {
     const user = await this.getUserById(userId)
 
     if (!user) {
       throw new HttpException('Пользователь не найден', HttpStatus.NOT_FOUND)
     }
 
-    user.liked.push(film._id)
+    user.liked.push(filmId)
     user.save()
     return user
   }
-  
-  async addFilmToHistory(userId: string, film: FilmDocument) {
+
+  async removeFromLikedMovies(userId: string, filmId: FilmDocument) {
+    const user = await this.getUserById(userId)
+    if (!user) {
+      throw new HttpException('Пользователь не найден', HttpStatus.NOT_FOUND)
+    }
+    user.liked = user.liked.filter((film) => film === filmId)
+    user.save()
+
+    return user
+  }
+
+  async addFilmToHistory(userId: string, filmId: FilmDocument) {
     const user = await this.getUserById(userId)
 
     if (!user) {
       throw new HttpException('Пользователь не найден', HttpStatus.NOT_FOUND)
     }
 
-    user.history.push(film._id)
+    const filmInHistory = user.history.filter((film) => film !== filmId)
+    if (filmInHistory.length > 0) {
+      const filteredHistory = [
+        filmInHistory[0],
+        ...user.history.filter((film) => film === filmInHistory[0]),
+      ]
+      user.history = filteredHistory
+      return user
+    }
+
+    user.history.push(filmId)
     user.save()
     return user
   }

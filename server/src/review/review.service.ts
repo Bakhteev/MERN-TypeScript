@@ -21,13 +21,13 @@ export class ReviewService {
     private filmsService: FilmsService
   ) {}
 
-  async addReview(dto: CreateRewiewDto) {
+  async addReview(dto: CreateRewiewDto, userId: string) {
     try {
       const film = await this.filmsService.getFilmById(dto.filmId)
       if (!film) {
         throw new HttpException('Данный фильм не найден', HttpStatus.NOT_FOUND)
       }
-      const user = await this.userService.getUserById(dto.userId)
+      const user = await this.userService.getUserById(userId)
 
       const review = await this.reviewSchema.create({
         text: dto.text,

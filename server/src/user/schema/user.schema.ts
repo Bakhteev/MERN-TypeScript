@@ -17,9 +17,6 @@ export class User {
   @Prop()
   name: string
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }] })
-  reviews: Review[]
-
   @Prop()
   roles: string[]
 
@@ -32,6 +29,9 @@ export class User {
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Film' }],
   })
   history: Film[]
+
+  @Prop()
+  date_of_registry: number
 }
 
 export const UserSchema = SchemaFactory.createForClass(User)

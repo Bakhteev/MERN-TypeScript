@@ -14,6 +14,7 @@ import { Acter, ActerSchema } from 'src/acter/schema/acter.schema'
 import { ReviewModule } from 'src/review/review.module'
 import { JwtModule } from '@nestjs/jwt'
 import { UserModule } from 'src/user/user.module'
+import { LikesModule } from 'src/likes/likes.module'
 
 @Module({
   providers: [
@@ -39,7 +40,9 @@ import { UserModule } from 'src/user/user.module'
         expiresIn: '24h',
       },
     }),
-    UserModule
+    UserModule,
+    ReviewModule,
+    LikesModule,
   ],
   exports: [FilmsService, JwtModule],
 })

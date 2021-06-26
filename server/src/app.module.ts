@@ -12,6 +12,8 @@ import { ReviewModule } from './review/review.module'
 import { ServeStaticModule } from '@nestjs/serve-static'
 import { join } from 'path'
 import { ConfigModule } from '@nestjs/config'
+import { LikesModule } from './likes/likes.module';
+import { DislikesModule } from './dislikes/dislikes.module';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
@@ -30,6 +32,8 @@ import { ConfigModule } from '@nestjs/config'
     AuthModule,
     RolesModule,
     ReviewModule,
+    LikesModule,
+    DislikesModule,
   ],
 })
 export class AppModule {}
