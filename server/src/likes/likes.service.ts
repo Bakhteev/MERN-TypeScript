@@ -9,6 +9,11 @@ import { Like, LikeDocument } from './schema/likes.shema'
 export class LikesService {
   constructor(@InjectModel(Like.name) private Likemodel: Model<LikeDocument>) {}
 
+  async createLikeTable(film_id) {
+    const like = await this.Likemodel.create({ film_id })
+    return like._id
+  }
+
   async addLike(filmId: any, userId: any) {
     const like = await this.Likemodel.findOne({ film_id: filmId })
 

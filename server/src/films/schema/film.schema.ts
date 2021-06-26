@@ -59,13 +59,13 @@ export class Film {
   category: Category[]
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Like' })
-  private likesShema: Like
+  likesShema: Like
 
   @Prop()
   likes: number
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Dislike' })
-  private dislikesShema: Dislike
+  dislikesShema: Dislike
 
   @Prop()
   dislikes: number
