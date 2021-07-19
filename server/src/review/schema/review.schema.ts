@@ -1,13 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import * as mongoose from 'mongoose'
 import { Document } from 'mongoose'
+import { TimeStamps } from 'src/adstractClasses/TimeStamps'
 import { Film } from 'src/films/schema/film.schema'
 import { User } from 'src/user/schema/user.schema'
 
 export type ReviewDocument = Review & Document
 
 @Schema()
-export class Review {
+export class Review extends TimeStamps {
   @Prop()
   text: string
 

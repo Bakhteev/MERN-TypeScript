@@ -4,7 +4,7 @@ import * as mongoose from 'mongoose'
 import { Category } from '../../category/schema/category.schema'
 import { Author } from './author.schema'
 import { Genre } from 'src/genre/schema/genre.schema'
-import { Acter } from 'src/acter/schema/acter.schema'
+import { Acter, TimeStamps } from 'src/acter/schema/acter.schema'
 import { Review } from 'src/review/schema/review.schema'
 import { Like } from 'src/likes/schema/likes.shema'
 import { Dislike } from 'src/dislikes/schema/dislikes.shema'
@@ -12,7 +12,7 @@ import { Dislike } from 'src/dislikes/schema/dislikes.shema'
 export type FilmDocument = Film & Document
 
 @Schema()
-export class Film {
+export class Film extends TimeStamps {
   @Prop()
   name: string
 
@@ -78,3 +78,4 @@ export class Film {
 }
 
 export const FilmSchema = SchemaFactory.createForClass(Film)
+export const FilmModel = mongoose.model<Film & Document>('Film', FilmSchema)

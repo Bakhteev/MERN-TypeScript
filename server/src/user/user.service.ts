@@ -37,7 +37,6 @@ export class UserService {
     const user = await this.userModel.create(dto)
     const role = await this.rolesService.getRoleByValue('USER')
     user.roles = [role.value]
-    user.date_of_registry = Date.now()
 
     role.users.push(user._id)
     user.save()

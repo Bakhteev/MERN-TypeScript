@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   forwardRef,
   HttpException,
   HttpStatus,
@@ -38,6 +39,10 @@ export class FilmsService {
     private likesService: LikesService
   ) {}
 
+  private sortFilms() {}
+
+  private filterFilms() {}
+
   async getFilms(
     page = 0,
     limit = 10,
@@ -45,61 +50,31 @@ export class FilmsService {
     mostLiked?: string,
     mostViewed?: string
   ) {
-    if (rating) {
-      const films = await this.filmModel
-        .find()
-        .skip(+page * +limit)
-        .limit(+limit)
-        .populate(['category', 'genre'])
-      const filteredFilms = films.filter((film) => film.rating >= +rating)
-      return filteredFilms
-    }
-    if (mostLiked) {
-      const films = await this.filmModel
-        .find()
-        .skip(+page * +limit)
-        .limit(+limit)
-        .populate(['category', 'genre'])
-      const filteredFilms = films.sort((a, b) => b.likes - a.likes)
-
-      return filteredFilms
-    }
-    if (rating && mostLiked) {
-      const films = await this.filmModel
-        .find()
-        .skip(+page * +limit)
-        .limit(+limit)
-        .populate(['category', 'genre'])
-      const filteredFilms = films
-        .filter((film) => film.rating >= +rating)
-        .sort((a, b) => b.likes - a.likes)
-      return filteredFilms
-    }
-    if (mostViewed) {
-      const films = await this.filmModel
-        .find()
-        .skip(+page * +limit)
-        .limit(+limit)
-        .populate(['category', 'genre'])
-      const filteredFilms = films.sort((a, b) => b.viewers - a.viewers)
-      return filteredFilms
-    }
-    if (rating && mostViewed) {
-      const films = await this.filmModel
-        .find()
-        .skip(+page * +limit)
-        .limit(+limit)
-        .populate(['category', 'genre'])
-      const filteredFilms = films
-        .filter((film) => film.rating >= +rating)
-        .sort((a, b) => b.viewers - a.viewers)
-      return filteredFilms
-    }
     const films = await this.filmModel
       .find()
       .skip(+page * +limit)
       .limit(+limit)
       .populate(['category', 'genre'])
+
+    if (rating) {
+      return films.filter((film) => film.rating >= +rating)
+    }
+    if (mostLiked) {
+      return films.sort((a, b) => b.likes - a.likes)
+    }
+    if (rating && mostLiked) {
+      return films
+        .filter((film) => film.rating >= +rating)
+        .sort((a, b) => b.likes - a.likes)
+    }
+    if (mostViewed) {
+      return films.sort((a, b) => b.viewers - a.viewers)
+    }
+    if (rating && mostViewed) {
+      return films
+        .filter((film) => film.rating >= +rating)
+        .sort((a, b) => b.viewers - a.viewers)
+    }
     return films
   }
 
@@ -107,9 +82,7 @@ export class FilmsService {
     const film = await this.filmModel
       .findById(id)
       .populate(['category', 'author', 'acters', 'genre', 'reviews'])
-    if (!film) {
-      throw new HttpException('Данный фильм не найден', HttpStatus.NOT_FOUND)
-    }
+
     return film
   }
 
@@ -132,7 +105,7 @@ export class FilmsService {
       })
 
       if (film.length > 0) {
-        throw new HttpException('такой фильм уже есть', HttpStatus.BAD_REQUEST)
+        throw new BadRequestException('такой фильм уже есть')
       }
 
       const author = await this.authorModel.findOne({
