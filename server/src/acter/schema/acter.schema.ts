@@ -3,8 +3,13 @@ import { Document } from 'mongoose'
 
 export type ActerDocument = Acter & Document
 
-@Schema()
-export class Acter {
+export  abstract class TimeStamps {
+  public createdAt?: Date
+  public updatedAt?: Date
+}
+
+@Schema({ timestamps: true })
+export class Acter  {
   @Prop()
   name: string
 

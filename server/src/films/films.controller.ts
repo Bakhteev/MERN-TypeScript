@@ -2,11 +2,10 @@ import {
   Body,
   Controller,
   Get,
+  NotFoundException,
   Param,
   Post,
   Query,
-  Req,
-  Res,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -22,8 +21,9 @@ import { ReviewService } from 'src/review/review.service'
 import { AddRatingDto } from './dto/add-rating.dto'
 import { RolesGuard } from 'src/auth/roles.guard'
 import { Roles } from 'src/auth/roles.decorator'
-import { Response, Request } from 'express'
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
+import { UseGetUserIdDecorator } from 'src/decorators/getUser.decorator'
+import { NOTFOUND } from 'node:dns'
 
 @Controller('films')
 export class FilmsController {
@@ -40,27 +40,22 @@ export class FilmsController {
     @Query('mostLiked') mostLiked,
     @Query('mostViewed') mostViewed
   ) {
-    if (rating) {
-      return this.filmsService.getFilms(page, limit, rating)
-    }
-    if (mostLiked) {
-      return this.filmsService.getFilms(page, limit, null, mostLiked)
-    }
-    if (mostViewed) {
-      return this.filmsService.getFilms(page, limit, '', '', mostViewed)
-    }
-    if (rating && mostLiked) {
-      return this.filmsService.getFilms(page, limit, rating, mostLiked)
-    }
-    if (rating && mostViewed) {
-      return this.filmsService.getFilms(page, limit, rating, '', mostViewed)
-    }
-    return this.filmsService.getFilms(page, limit)
+    return this.filmsService.getFilms(
+      page,
+      limit,
+      rating,
+      mostLiked,
+      mostViewed
+    )
   }
 
   @Get()
-  getFilmById(@Param('id') id: string) {
-    return this.filmsService.getFilmById(id)
+  getFilmById(@Query('id') id: string) {
+    const film = this.filmsService.getFilmById(id)
+    if (!film) {
+      throw new NotFoundException('Данный фильм не найден')
+    }
+    return film
   }
 
   @Roles('ADMIN')
@@ -118,8 +113,11 @@ export class FilmsController {
 
   @UseGuards(JwtAuthGuard)
   @Post('/like')
-  addLike(@Query('filmId') filmId: string, @Req() req: any) {
-    return this.filmsService.addLike(filmId, req.user.id)
+  addLike(
+    @Query('filmId') filmId: string,
+    @UseGetUserIdDecorator() userId: string
+  ) {
+    return this.filmsService.addLike(filmId, userId)
   }
 
   @UseGuards(JwtAuthGuard)
@@ -130,8 +128,11 @@ export class FilmsController {
 
   @UseGuards(JwtAuthGuard)
   @Post('/view')
-  addView(@Query('filmId') filmId: string, @Req() req: any) {
-    return this.filmsService.addView(filmId, req.user.id)
+  addView(
+    @Query('filmId') filmId: string,
+    @UseGetUserIdDecorator() userId: string
+  ) {
+    return this.filmsService.addView(filmId, userId)
   }
 
   @UseGuards(JwtAuthGuard)
@@ -142,7 +143,10 @@ export class FilmsController {
 
   @UseGuards(JwtAuthGuard)
   @Post('/review')
-  addRewiew(@Body() dto: CreateRewiewDto, @Req() req: any) {
-    return this.reviewService.addReview(dto, req.user.id)
+  addRewiew(
+    @Body() dto: CreateRewiewDto,
+    @UseGetUserIdDecorator() userId: string
+  ) {
+    return this.reviewService.addReview(dto, userId)
   }
 }

@@ -1,13 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import * as mongoose from 'mongoose'
 import { Document } from 'mongoose'
+import { TimeStamps } from 'src/adstractClasses/TimeStamps'
 import { Film } from 'src/films/schema/film.schema'
 import { Review } from 'src/review/schema/review.schema'
 
 export type UserDocument = User & Document
 
-@Schema()
-export class User {
+@Schema({ timestamps: true })
+export class User extends TimeStamps {
   @Prop({ unique: true })
   email: string
 
@@ -29,9 +30,6 @@ export class User {
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Film' }],
   })
   history: Film[]
-
-  @Prop()
-  date_of_registry: number
 }
 
 export const UserSchema = SchemaFactory.createForClass(User)

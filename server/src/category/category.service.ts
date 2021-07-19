@@ -29,14 +29,6 @@ export class CategoryService {
   }
 
   async getCategories() {
-    try {
-      const categories = await this.categoryModel.find()
-      return categories
-    } catch (e) {
-      throw new HttpException(
-        { message: 'Что-то пошло не так', error: e.message },
-        HttpStatus.INTERNAL_SERVER_ERROR
-      )
-    }
+    return await this.categoryModel.find()
   }
 }
