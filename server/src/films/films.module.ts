@@ -34,16 +34,10 @@ import { LikesModule } from 'src/likes/likes.module'
     MongooseModule.forFeature([{ name: Acter.name, schema: ActerSchema }]),
     MongooseModule.forFeature([{ name: Genre.name, schema: GenreSchema }]),
     forwardRef(() => ReviewModule),
-    JwtModule.register({
-      secret: process.env.SECRET_KEY || 'SECRET',
-      signOptions: {
-        expiresIn: '24h',
-      },
-    }),
     UserModule,
     ReviewModule,
     LikesModule,
   ],
-  exports: [FilmsService, JwtModule],
+  exports: [FilmsService],
 })
 export class FilmsModule {}

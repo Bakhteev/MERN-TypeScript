@@ -19,11 +19,10 @@ import { CreateActerDto } from 'src/acter/dto/create-acter.dto'
 import { CreateRewiewDto } from '../review/dto/create-rewiew.dto'
 import { ReviewService } from 'src/review/review.service'
 import { AddRatingDto } from './dto/add-rating.dto'
-import { RolesGuard } from 'src/auth/roles.guard'
+import { RolesGuard } from 'src/auth/guards/roles.guard'
 import { Roles } from 'src/auth/roles.decorator'
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard'
 import { UseGetUserIdDecorator } from 'src/decorators/getUser.decorator'
-import { NOTFOUND } from 'node:dns'
 
 @Controller('films')
 export class FilmsController {
@@ -50,8 +49,10 @@ export class FilmsController {
   }
 
   @Get()
-  getFilmById(@Query('id') id: string) {
-    const film = this.filmsService.getFilmById(id)
+  getFilmById(@Query('filmId') filmId: string) {
+    console.log(filmId)
+
+    const film = this.filmsService.getFilmById(filmId)
     if (!film) {
       throw new NotFoundException('Данный фильм не найден')
     }
@@ -59,7 +60,7 @@ export class FilmsController {
   }
 
   @Roles('ADMIN')
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post()
   @UseInterceptors(
     FileFieldsInterceptor([
@@ -84,14 +85,14 @@ export class FilmsController {
   }
 
   @Roles('ADMIN')
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('/category')
   createCategory(@Body() dto: CreateCategoryDto) {
     return this.filmsService.createCategory(dto)
   }
 
   @Roles('ADMIN')
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('/genre')
   createGenre(@Body() dto: CreateGenreDto) {
     return this.filmsService.createGenre(dto)
@@ -100,15 +101,6 @@ export class FilmsController {
   @Get('/genre')
   getGenres() {
     return this.filmsService.getGenres()
-  }
-
-  @Roles('ADMIN')
-  @UseGuards(RolesGuard)
-  @Post('/acters')
-  @UseInterceptors(FileFieldsInterceptor([{ name: 'picture', maxCount: 1 }]))
-  createActers(@UploadedFiles() file, @Body() dto: CreateActerDto) {
-    const { picture } = file
-    return this.filmsService.createActer(dto, picture[0])
   }
 
   @UseGuards(JwtAuthGuard)
