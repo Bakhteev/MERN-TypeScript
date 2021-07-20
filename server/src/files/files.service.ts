@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import * as path from 'path'
 import * as fs from 'fs'
 import * as uuid from 'uuid'
-import { Storage } from 'megajs'
+import { ConfigService } from '@nestjs/config'
 
 export enum FileType {
   VIDEO = 'video',
@@ -26,4 +26,3 @@ export class FilesService {
     }
   }
 }
-

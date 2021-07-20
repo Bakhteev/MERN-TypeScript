@@ -40,7 +40,7 @@ export class LikesService {
       throw new HttpException('', HttpStatus.BAD_REQUEST)
     }
 
-    const usersLike = like.users_id.filter((user) => user !== userId)
+    const usersLike = like.users_id.filter((id) => id !== userId)
 
     if (usersLike.length > 0) {
       return false

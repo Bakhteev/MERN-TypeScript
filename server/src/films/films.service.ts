@@ -39,10 +39,6 @@ export class FilmsService {
     private likesService: LikesService
   ) {}
 
-  private sortFilms() {}
-
-  private filterFilms() {}
-
   async getFilms(
     page = 0,
     limit = 10,
@@ -79,11 +75,23 @@ export class FilmsService {
   }
 
   async getFilmById(id: string) {
-    const film = await this.filmModel
+    return await this.filmModel
       .findById(id)
       .populate(['category', 'author', 'acters', 'genre', 'reviews'])
+  }
 
-    return film
+  async checkIfFilmLiked(filmId: string, userId: string) {
+    const user = await this.userService.getUserById(userId)
+    console.log(user)
+
+    const liked = user.liked.filter((id: any) => filmId !== id)
+
+    console.log(liked)
+
+    if (liked.length > 0) {
+      return true
+    }
+    return false
   }
 
   async createFilm(
@@ -244,10 +252,6 @@ export class FilmsService {
     film.rating = Number(film.rating.toFixed(1))
     film.save()
     return film
-  }
-
-  async createActer(dto: CreateActerDto, file: Express.Multer.File) {
-    return this.acterService.createActer(dto, file)
   }
 
   async addRewiew(dto: CreateRewiewDto, userId: string) {

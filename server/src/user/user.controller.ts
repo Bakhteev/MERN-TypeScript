@@ -1,10 +1,18 @@
-import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UserService } from './user.service'
-import { Response } from 'express'
 import { Roles } from 'src/auth/roles.decorator'
-import { RolesGuard } from 'src/auth/roles.guard'
+import { RolesGuard } from 'src/auth/guards/roles.guard'
 import { AddRoleDto } from './dto/add-role.dto'
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard'
 
 @Controller('user')
 export class UserController {
@@ -15,14 +23,14 @@ export class UserController {
   }
 
   @Roles('ADMIN')
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get()
   getAll() {
     return this.userService.getAllUsers()
   }
 
   @Roles('ADMIN')
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('/role')
   addRole(@Body() dto: AddRoleDto) {
     return this.userService.addRole(dto)
