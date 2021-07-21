@@ -8,7 +8,7 @@ export type LikeDocument = Like & Document
 
 @Schema()
 export class Like {
-  @Prop({ default: 0 })
+  @Prop({ default: 1 })
   number: number
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Film' })

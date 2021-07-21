@@ -1,64 +1,101 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
-import { FilmsService } from 'src/films/films.service'
+import { FilmsService } from '../films/films.service'
 import { UserDocument } from 'src/user/schema/user.schema'
 import { Like, LikeDocument } from './schema/likes.shema'
+import { UserService } from 'src/user/user.service'
 
 @Injectable()
 export class LikesService {
-  constructor(@InjectModel(Like.name) private Likemodel: Model<LikeDocument>) {}
+  constructor(
+    @InjectModel(Like.name) private Likemodel: Model<LikeDocument>,
+    private filmsService: FilmsService,
+    private userService: UserService
+  ) {}
 
-  async createLikeTable(film_id) {
-    const like = await this.Likemodel.create({ film_id })
-    return like._id
+  async createLikeTable(film_id, user_id) {
+    const likeTable = await this.Likemodel.create({
+      film_id,
+      users_id: [user_id],
+    })
+    return likeTable._id
   }
 
   async addLike(filmId: any, userId: any) {
-    const like = await this.Likemodel.findOne({ film_id: filmId })
+    const film = await this.filmsService.getFilmById(filmId)
 
-    if (!like) {
-      throw new HttpException('', HttpStatus.BAD_REQUEST)
+    if (!film) {
+      throw new BadRequestException('')
     }
 
-    const checkLike = await this.checkLike(like._id, userId)
+    const likeTable = await this.Likemodel.findOne({ film_id: filmId })
 
-    if (!checkLike) {
-      return false
+    if (!likeTable) {
+      const likeTableId = await this.createLikeTable(filmId, userId)
+
+      film.likesShema = likeTableId
+      film.likes += 1
+      film.save()
+
+      await this.userService.addToLikedMovies(userId, film)
+
+      return film
     }
 
-    like.number += 1
-    like.users_id.push(userId)
-    like.save()
-    return like
+    const isFilmLiked = await this.checkLike(likeTable._id, userId)
+
+    if (isFilmLiked) {
+      await this.removeLike(filmId, userId)
+
+      film.likes -= 1
+      film.save()
+
+      await this.userService.removeFromLikedMovies(userId, film._id)
+
+      return film
+    }
+
+    film.likes += 1
+    await this.userService.addToLikedMovies(userId, film)
+
+    likeTable.number += 1
+    likeTable.users_id.push(userId)
+
+    film.save()
+    likeTable.save()
+    return film
   }
 
-  async checkLike(likeId: string, userId: any) {
-    const like = await this.Likemodel.findById(likeId)
+  async checkLike(likeTableId: string, userId: any) {
+    const likeTable = await this.Likemodel.findById(likeTableId)
 
-    if (!like) {
-      throw new HttpException('', HttpStatus.BAD_REQUEST)
-    }
-
-    const usersLike = like.users_id.filter((id) => id !== userId)
+    const usersLike = likeTable.users_id.filter((id) => id !== userId)
 
     if (usersLike.length > 0) {
-      return false
+      return true
     }
 
-    return true
+    return false
   }
 
   async removeLike(filmId: any, userId: any) {
-    const like = await this.Likemodel.findOne({ film_id: filmId })
-    if (!like) {
-      throw new HttpException('', HttpStatus.INTERNAL_SERVER_ERROR)
+    const likeTable = await this.Likemodel.findOne({ film_id: filmId })
+
+    if (!likeTable) {
+      throw new NotFoundException('')
     }
 
-    like.number -= 1
-    like.users_id = like.users_id.filter((user) => user === userId)
+    likeTable.number -= 1
+    likeTable.users_id = likeTable.users_id.filter((user) => user === userId)
 
-    like.save()
-    return like
+    likeTable.save()
+    // return likeTable
   }
 }

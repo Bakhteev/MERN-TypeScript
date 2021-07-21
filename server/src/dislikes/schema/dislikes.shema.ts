@@ -8,7 +8,7 @@ export type DislikeDocument = Dislike & Document
 
 @Schema()
 export class Dislike {
-  @Prop()
+  @Prop({ default: 1 })
   number: number
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Film' })

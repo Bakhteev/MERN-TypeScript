@@ -22,7 +22,7 @@ import { CreateRewiewDto } from '../review/dto/create-rewiew.dto'
 import { ReviewService } from 'src/review/review.service'
 import { AddRatingDto } from './dto/add-rating.dto'
 import { UserService } from 'src/user/user.service'
-import { LikesService } from 'src/likes/likes.service'
+// import { LikesService } from 'src/likes/likes.service'
 import { UserDocument } from 'src/user/schema/user.schema'
 
 @Injectable()
@@ -30,13 +30,11 @@ export class FilmsService {
   constructor(
     @InjectModel(Film.name) private filmModel: Model<FilmDocument>,
     @InjectModel(Author.name) private authorModel: Model<AuthorDocument>,
-    private categoryService: CategoryService,
-    private genreService: GenreService,
+    // private genreService: GenreService,
     private filesService: FilesService,
-    private acterService: ActerService,
     private userService: UserService,
-    private reviewService: ReviewService,
-    private likesService: LikesService
+    // private reviewService: ReviewService,
+    // private likesService: LikesService
   ) {}
 
   async getFilms(
@@ -141,8 +139,8 @@ export class FilmsService {
         film: filmPath,
       })
 
-      const likeId = await this.likesService.createLikeTable(newFilm._id)
-      newFilm.likesShema = likeId
+      // const likeId = await this.likesService.createLikeTable(newFilm._id)
+      // newFilm.likesShema = likeId
 
       if (author) {
         author.film_and_serials.push(newFilm._id)
@@ -167,55 +165,16 @@ export class FilmsService {
     }
   }
 
-  async getCategories() {
-    return this.categoryService.getCategories()
-  }
+  // async addDislike(filmId: string) {
+  //   const film = await this.filmModel.findById(filmId)
+  //   if (!film) {
+  //     throw new HttpException('Фильм не найден', HttpStatus.BAD_REQUEST)
+  //   }
 
-  async createCategory(dto: CreateCategoryDto) {
-    return this.categoryService.createCategory(dto)
-  }
-
-  async getGenres() {
-    return this.genreService.getGenres()
-  }
-
-  async createGenre(dto: CreateGenreDto) {
-    return this.genreService.createGenre(dto)
-  }
-
-  async addLike(filmId: string, userId: string) {
-    const film = await this.filmModel.findById(filmId)
-    if (!film) {
-      throw new HttpException('Фильм не найден', HttpStatus.BAD_REQUEST)
-    }
-
-    const liked = await this.likesService.addLike(filmId, userId)
-
-    if (!liked) {
-      await this.likesService.removeLike(filmId, userId)
-
-      film.likes -= 1
-      film.save()
-      await this.userService.removeFromLikedMovies(userId, film._id)
-      return film
-    }
-
-    film.likes += 1
-    film.save()
-    await this.userService.addToLikedMovies(userId, film)
-    return film
-  }
-
-  async addDislike(filmId: string) {
-    const film = await this.filmModel.findById(filmId)
-    if (!film) {
-      throw new HttpException('Фильм не найден', HttpStatus.BAD_REQUEST)
-    }
-
-    film.dislikes += 1
-    film.save()
-    return film
-  }
+  //   film.dislikes += 1
+  //   film.save()
+  //   return film
+  // }
 
   async addView(filmId: string, userId: string) {
     const film = await this.filmModel.findById(filmId)
@@ -252,9 +211,5 @@ export class FilmsService {
     film.rating = Number(film.rating.toFixed(1))
     film.save()
     return film
-  }
-
-  async addRewiew(dto: CreateRewiewDto, userId: string) {
-    return this.reviewService.addReview(dto, userId)
   }
 }

@@ -12,31 +12,33 @@ import { FilesService } from 'src/files/files.service'
 import { ActerService } from 'src/acter/acter.service'
 import { Acter, ActerSchema } from 'src/acter/schema/acter.schema'
 import { ReviewModule } from 'src/review/review.module'
-import { JwtModule } from '@nestjs/jwt'
 import { UserModule } from 'src/user/user.module'
-import { LikesModule } from 'src/likes/likes.module'
+// import { LikesModule } from 'src/likes/likes.module'
 
 @Module({
   providers: [
     FilmsService,
-    CategoryService,
-    GenreService,
+    // CategoryService,
+    // GenreService,
     FilesService,
-    ActerService,
+    // ActerService,
   ],
   controllers: [FilmsController],
   imports: [
-    MongooseModule.forFeature([{ name: Film.name, schema: FilmSchema }]),
-    MongooseModule.forFeature([{ name: Author.name, schema: AuthorSchema }]),
     MongooseModule.forFeature([
-      { name: Category.name, schema: CategorySchema },
+      { name: Film.name, schema: FilmSchema },
+      { name: Author.name, schema: AuthorSchema },
     ]),
-    MongooseModule.forFeature([{ name: Acter.name, schema: ActerSchema }]),
-    MongooseModule.forFeature([{ name: Genre.name, schema: GenreSchema }]),
+    // MongooseModule.forFeature([{ name: Author.name, schema: AuthorSchema }]),
+    // MongooseModule.forFeature([
+    //   { name: Category.name, schema: CategorySchema },
+    // ]),
+    // MongooseModule.forFeature([{ name: Acter.name, schema: ActerSchema }]),
+    // MongooseModule.forFeature([{ name: Genre.name, schema: GenreSchema }]),
     forwardRef(() => ReviewModule),
+    // forwardRef(() => LikesModule),
     UserModule,
     ReviewModule,
-    LikesModule,
   ],
   exports: [FilmsService],
 })
