@@ -4,6 +4,7 @@ import { UserModule } from 'src/user/user.module'
 import { ReviewService } from './review.service'
 import { Review, ReviewSchema } from './schema/review.schema'
 import { FilmsModule } from 'src/films/films.module'
+import { ReviewController } from './review.controller';
 
 @Module({
   providers: [ReviewService],
@@ -13,5 +14,6 @@ import { FilmsModule } from 'src/films/films.module'
     forwardRef(() => FilmsModule),
   ],
   exports: [ReviewService],
+  controllers: [ReviewController],
 })
 export class ReviewModule {}

@@ -20,7 +20,7 @@ MERN-TS-Backend:
       ✔ should-fix-one-user-can-like-once @done(21-06-26 21:05)
     ✔ add-rewiew @done(21-06-26 15:53)
     ✔ add-Dislike @done(21-06-21 19:00)
-      ☐ should-fix-one-user-can-dislike-once
+      ✔ should-fix-one-user-can-dislike-once @done(21-07-21 17:45)
     ✔ add-view @done(21-06-21 16:31)
       ✔ add-history @done(21-06-21 19:03)
       ☐ should-fix-one-user-can-view-once?

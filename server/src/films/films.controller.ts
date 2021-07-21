@@ -28,7 +28,6 @@ import { UseGetUserIdDecorator } from 'src/decorators/getUser.decorator'
 export class FilmsController {
   constructor(
     private filmsService: FilmsService,
-    private reviewService: ReviewService
   ) {}
 
   @Get()
@@ -79,44 +78,20 @@ export class FilmsController {
     )
   }
 
-  @Get('/category')
-  getCategories() {
-    return this.filmsService.getCategories()
-  }
+  // @UseGuards(JwtAuthGuard)
+  // @Post('/like')
+  // addLike(
+  //   @Query('filmId') filmId: string,
+  //   @UseGetUserIdDecorator() userId: string
+  // ) {
+  //   return this.filmsService.addLike(filmId, userId)
+  // }
 
-  @Roles('ADMIN')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Post('/category')
-  createCategory(@Body() dto: CreateCategoryDto) {
-    return this.filmsService.createCategory(dto)
-  }
-
-  @Roles('ADMIN')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Post('/genre')
-  createGenre(@Body() dto: CreateGenreDto) {
-    return this.filmsService.createGenre(dto)
-  }
-
-  @Get('/genre')
-  getGenres() {
-    return this.filmsService.getGenres()
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Post('/like')
-  addLike(
-    @Query('filmId') filmId: string,
-    @UseGetUserIdDecorator() userId: string
-  ) {
-    return this.filmsService.addLike(filmId, userId)
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Post('/dislike')
-  addDislike(@Query('filmId') filmId: string) {
-    return this.filmsService.addDislike(filmId)
-  }
+  // @UseGuards(JwtAuthGuard)
+  // @Post('/dislike')
+  // addDislike(@Query('filmId') filmId: string) {
+  //   return this.filmsService.addDislike(filmId)
+  // }
 
   @UseGuards(JwtAuthGuard)
   @Post('/view')
@@ -131,14 +106,5 @@ export class FilmsController {
   @Post('/rating')
   addRating(@Body() dto: AddRatingDto) {
     return this.filmsService.addRating(dto)
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Post('/review')
-  addRewiew(
-    @Body() dto: CreateRewiewDto,
-    @UseGetUserIdDecorator() userId: string
-  ) {
-    return this.reviewService.addReview(dto, userId)
   }
 }

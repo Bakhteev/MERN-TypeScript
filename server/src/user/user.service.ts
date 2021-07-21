@@ -91,6 +91,7 @@ export class UserService {
         ...user.history.filter((film) => film === filmInHistory[0]),
       ]
       user.history = filteredHistory
+      user.save()
       return user
     }
 

@@ -46,13 +46,13 @@ export class Film extends TimeStamps {
   @Prop()
   price: number
 
-  @Prop()
+  @Prop({ default: 0 })
   numberOfVoters: number
 
-  @Prop()
+  @Prop({ default: 0 })
   rating: number
 
-  @Prop()
+  @Prop({ default: 0 })
   viewers: number
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category' }] })
@@ -61,13 +61,13 @@ export class Film extends TimeStamps {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Like' })
   likesShema: Like
 
-  @Prop()
+  @Prop({ default: 0 })
   likes: number
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Dislike' })
   dislikesShema: Dislike
 
-  @Prop()
+  @Prop({ default: 0 })
   dislikes: number
 
   @Prop()
