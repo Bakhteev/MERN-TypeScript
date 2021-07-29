@@ -1,13 +1,8 @@
-import {
-  BadRequestException,
-  HttpException,
-  HttpStatus,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { FilmsService } from 'src/films/films.service'
+import { IsFilmDislikedOrLikedService } from 'src/is-film-disliked-or-liked/is-film-disliked-or-liked.service'
 import { UserService } from 'src/user/user.service'
 import { Dislike, DislikeDocument } from './schema/dislikes.shema'
 
@@ -16,7 +11,8 @@ export class DislikesService {
   constructor(
     @InjectModel(Dislike.name) private dislikeModel: Model<DislikeDocument>,
     private filmsService: FilmsService,
-    private userService: UserService
+    private userService: UserService,
+    private isFilmdislikedorLikedService: IsFilmDislikedOrLikedService
   ) {}
 
   async createDislikeTable(film_id, user_id) {
@@ -27,23 +23,11 @@ export class DislikesService {
     return dislikeTable._id
   }
 
-  async checkDislike(dislikeTableId, userId) {
-    const dislikeTable = await this.dislikeModel.findById(dislikeTableId)
-
-    const usersLike = dislikeTable.users_id.filter((id) => id !== userId)
-
-    if (usersLike.length > 0) {
-      return true
-    }
-
-    return false
-  }
-
   async addDislike(filmId, userId) {
     const film = await this.filmsService.getFilmById(filmId)
 
     if (!film) {
-      throw new BadRequestException('')
+      throw new NotFoundException('')
     }
 
     const dislikeTable = await this.dislikeModel.findOne({ film_id: filmId })
@@ -55,18 +39,38 @@ export class DislikesService {
       film.dislikes += 1
       film.save()
 
-      await this.userService.addToLikedMovies(userId, film)
+      return film
+    }
+
+    const isFilmDisliked = await this.isFilmdislikedorLikedService.checkDislike(
+      dislikeTable._id,
+      userId
+    )
+
+    const isFilmLiked = await this.isFilmdislikedorLikedService.checkLike(
+      film.likesShema,
+      userId
+    )
+
+    if (isFilmDisliked) {
+      await this.isFilmdislikedorLikedService.removeDislike(filmId, userId)
+
+      film.dislikes -= 1
+      film.save()
 
       return film
     }
 
-    const isFilmDisliked = await this.checkDislike(dislikeTable._id, userId)
+    if (isFilmLiked) {
+      await this.isFilmdislikedorLikedService.removeLike(filmId, userId)
 
-    if (isFilmDisliked) {
-      await this.removeDislike(filmId, userId)
+      film.likes -= 1
+      film.dislikes += 1
+      dislikeTable.number += 1
+      dislikeTable.users_id.push(userId)
 
-      film.dislikes -= 1
       film.save()
+      dislikeTable.save()
       return film
     }
 
@@ -78,20 +82,5 @@ export class DislikesService {
     film.save()
     dislikeTable.save()
     return film
-  }
-
-  async removeDislike(filmId, userId) {
-    const dislikeTable = await this.dislikeModel.findOne({ film_id: filmId })
-
-    if (!dislikeTable) {
-      throw new NotFoundException('')
-    }
-
-    dislikeTable.number -= 1
-    dislikeTable.users_id = dislikeTable.users_id.filter(
-      (user) => user === userId
-    )
-
-    dislikeTable.save()
   }
 }

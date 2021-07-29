@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
-import { Model } from 'mongoose'
+import { Model, Types } from 'mongoose'
 import { CreateUserDto } from './dto/create-user.dto'
 import { User, UserDocument } from './schema/user.schema'
 import { RolesService } from 'src/roles/roles.service'
@@ -77,7 +77,7 @@ export class UserService {
     return user
   }
 
-  async addFilmToHistory(userId: string, filmId: FilmDocument) {
+  async addFilmToHistory(userId: string, filmId: any) {
     const user = await this.getUserById(userId)
 
     if (!user) {
@@ -88,7 +88,7 @@ export class UserService {
     if (filmInHistory.length > 0) {
       const filteredHistory = [
         filmInHistory[0],
-        ...user.history.filter((film) => film === filmInHistory[0]),
+        ...user.history.filter((film) => film !== filmInHistory[0]),
       ]
       user.history = filteredHistory
       user.save()

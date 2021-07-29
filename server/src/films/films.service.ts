@@ -1,40 +1,25 @@
 import {
   BadRequestException,
-  forwardRef,
   HttpException,
   HttpStatus,
-  Inject,
   Injectable,
 } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
-import { CreateCategoryDto } from '../category/dto/create-category.dto'
 import { CreateFilmDto } from './dto/create-film.dto'
 import { Author, AuthorDocument } from './schema/author.schema'
 import { Film, FilmDocument } from './schema/film.schema'
-import { CategoryService } from 'src/category/category.service'
-import { CreateGenreDto } from 'src/genre/dto/create-genre.dto'
-import { GenreService } from 'src/genre/genre.service'
 import { FilesService, FileType } from 'src/files/files.service'
-import { CreateActerDto } from 'src/acter/dto/create-acter.dto'
-import { ActerService } from 'src/acter/acter.service'
-import { CreateRewiewDto } from '../review/dto/create-rewiew.dto'
-import { ReviewService } from 'src/review/review.service'
 import { AddRatingDto } from './dto/add-rating.dto'
 import { UserService } from 'src/user/user.service'
-// import { LikesService } from 'src/likes/likes.service'
-import { UserDocument } from 'src/user/schema/user.schema'
 
 @Injectable()
 export class FilmsService {
   constructor(
     @InjectModel(Film.name) private filmModel: Model<FilmDocument>,
     @InjectModel(Author.name) private authorModel: Model<AuthorDocument>,
-    // private genreService: GenreService,
     private filesService: FilesService,
-    private userService: UserService,
-    // private reviewService: ReviewService,
-    // private likesService: LikesService
+    private userService: UserService
   ) {}
 
   async getFilms(
@@ -139,9 +124,6 @@ export class FilmsService {
         film: filmPath,
       })
 
-      // const likeId = await this.likesService.createLikeTable(newFilm._id)
-      // newFilm.likesShema = likeId
-
       if (author) {
         author.film_and_serials.push(newFilm._id)
         newFilm.author = author._id
@@ -165,34 +147,11 @@ export class FilmsService {
     }
   }
 
-  // async addDislike(filmId: string) {
-  //   const film = await this.filmModel.findById(filmId)
-  //   if (!film) {
-  //     throw new HttpException('Фильм не найден', HttpStatus.BAD_REQUEST)
-  //   }
-
-  //   film.dislikes += 1
-  //   film.save()
-  //   return film
-  // }
-
-  async addView(filmId: string, userId: string) {
-    const film = await this.filmModel.findById(filmId)
-    if (!film) {
-      throw new HttpException('Фильм не найден', HttpStatus.BAD_REQUEST)
-    }
-
-    film.viewers += 1
-    film.save()
-    await this.userService.addFilmToHistory(userId, film._id)
-    return film
-  }
-
-  async addRating(dto: AddRatingDto) {
-    const { film_id, rating } = dto
+  async addRating({ film_id, rating }: AddRatingDto) {
     const film = await this.filmModel.findById(film_id)
+
     if (!film) {
-      throw new HttpException('Фильм не найден', HttpStatus.BAD_REQUEST)
+      throw new HttpException('Фильм не найден', HttpStatus.NOT_FOUND)
     }
 
     if (film.numberOfVoters === 0 && film.rating === 0) {

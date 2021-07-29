@@ -14,6 +14,9 @@ import { join } from 'path'
 import { ConfigModule } from '@nestjs/config'
 import { LikesModule } from './likes/likes.module';
 import { DislikesModule } from './dislikes/dislikes.module';
+import { IsFilmDislikedOrLikedModule } from './is-film-disliked-or-liked/is-film-disliked-or-liked.module';
+import { ViewModule } from './view/view.module';
+import { RatingModule } from './rating/rating.module';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
@@ -34,6 +37,9 @@ import { DislikesModule } from './dislikes/dislikes.module';
     ReviewModule,
     LikesModule,
     DislikesModule,
+    IsFilmDislikedOrLikedModule,
+    ViewModule,
+    RatingModule,
   ],
 })
 export class AppModule {}
