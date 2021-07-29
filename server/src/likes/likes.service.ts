@@ -1,23 +1,21 @@
 import {
   BadRequestException,
-  HttpException,
-  HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { FilmsService } from '../films/films.service'
-import { UserDocument } from 'src/user/schema/user.schema'
 import { Like, LikeDocument } from './schema/likes.shema'
 import { UserService } from 'src/user/user.service'
-
+import { IsFilmDislikedOrLikedService } from 'src/is-film-disliked-or-liked/is-film-disliked-or-liked.service'
 @Injectable()
 export class LikesService {
   constructor(
     @InjectModel(Like.name) private Likemodel: Model<LikeDocument>,
     private filmsService: FilmsService,
-    private userService: UserService
+    private userService: UserService,
+    private isFilmdislikedorLikedService: IsFilmDislikedOrLikedService
   ) {}
 
   async createLikeTable(film_id, user_id) {
@@ -32,7 +30,7 @@ export class LikesService {
     const film = await this.filmsService.getFilmById(filmId)
 
     if (!film) {
-      throw new BadRequestException('')
+      throw new NotFoundException('')
     }
 
     const likeTable = await this.Likemodel.findOne({ film_id: filmId })
@@ -49,15 +47,39 @@ export class LikesService {
       return film
     }
 
-    const isFilmLiked = await this.checkLike(likeTable._id, userId)
+    const isFilmLiked = await this.isFilmdislikedorLikedService.checkLike(
+      likeTable._id,
+      userId
+    )
 
+    const isFilmDisliked = await this.isFilmdislikedorLikedService.checkDislike(
+      film.dislikesShema,
+      userId
+    )
     if (isFilmLiked) {
-      await this.removeLike(filmId, userId)
+      await this.isFilmdislikedorLikedService.removeLike(filmId, userId)
 
       film.likes -= 1
       film.save()
 
       await this.userService.removeFromLikedMovies(userId, film._id)
+
+      return film
+    }
+
+    if (isFilmDisliked) {
+      await this.isFilmdislikedorLikedService.removeDislike(filmId, userId)
+
+      film.likes += 1
+      film.dislikes -= 1
+
+      likeTable.number += 1
+      likeTable.users_id.push(userId)
+
+      await this.userService.addToLikedMovies(userId, filmId)
+
+      film.save()
+      likeTable.save()
 
       return film
     }
@@ -71,31 +93,5 @@ export class LikesService {
     film.save()
     likeTable.save()
     return film
-  }
-
-  async checkLike(likeTableId: string, userId: any) {
-    const likeTable = await this.Likemodel.findById(likeTableId)
-
-    const usersLike = likeTable.users_id.filter((id) => id !== userId)
-
-    if (usersLike.length > 0) {
-      return true
-    }
-
-    return false
-  }
-
-  async removeLike(filmId: any, userId: any) {
-    const likeTable = await this.Likemodel.findOne({ film_id: filmId })
-
-    if (!likeTable) {
-      throw new NotFoundException('')
-    }
-
-    likeTable.number -= 1
-    likeTable.users_id = likeTable.users_id.filter((user) => user === userId)
-
-    likeTable.save()
-    // return likeTable
   }
 }
