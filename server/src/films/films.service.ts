@@ -10,8 +10,8 @@ import { CreateFilmDto } from './dto/create-film.dto'
 import { Author, AuthorDocument } from './schema/author.schema'
 import { Film, FilmDocument } from './schema/film.schema'
 import { FilesService, FileType } from 'src/files/files.service'
-import { AddRatingDto } from './dto/add-rating.dto'
 import { UserService } from 'src/user/user.service'
+import { IsFilmDislikedOrLikedService } from '../is-film-disliked-or-liked/is-film-disliked-or-liked.service'
 
 @Injectable()
 export class FilmsService {
@@ -19,7 +19,8 @@ export class FilmsService {
     @InjectModel(Film.name) private filmModel: Model<FilmDocument>,
     @InjectModel(Author.name) private authorModel: Model<AuthorDocument>,
     private filesService: FilesService,
-    private userService: UserService
+    private userService: UserService,
+    private isFilmDislikedOrLikedService: IsFilmDislikedOrLikedService
   ) {}
 
   async getFilms(
@@ -57,25 +58,69 @@ export class FilmsService {
     return films
   }
 
-  async getFilmById(id: string) {
-    return await this.filmModel
+  async getFilmById(id: string, likedOrDisliked?: boolean, userId?: string) {
+    const film = await this.filmModel
       .findById(id)
       .populate(['category', 'author', 'acters', 'genre', 'reviews'])
-  }
 
-  async checkIfFilmLiked(filmId: string, userId: string) {
-    const user = await this.userService.getUserById(userId)
-    console.log(user)
+    if (likedOrDisliked) {
+      const isLiked = await this.isFilmDislikedOrLikedService.checkLike(
+        film.likesShema,
+        userId
+      )
+      const isDisliked = await this.isFilmDislikedOrLikedService.checkDislike(
+        film.dislikesShema,
+        userId
+      )
 
-    const liked = user.liked.filter((id: any) => filmId !== id)
+      film.liked = isLiked
+      film.disliked = isDisliked
 
-    console.log(liked)
-
-    if (liked.length > 0) {
-      return true
+      return film
     }
-    return false
+
+    return film
   }
+
+  // async getFilm(id: string, userId: string) {
+  //   const film = await this.getFilmById(id)
+
+  //   const isLiked = await this.isFilmDislikedOrLikedService.checkLike(
+  //     film.likesShema,
+  //     userId
+  //   )
+  //   const isDisliked = await this.isFilmDislikedOrLikedService.checkDislike(
+  //     film.dislikesShema,
+  //     userId
+  //   )
+
+  //   // const films = await this.filmModel
+  //   //   .aggregate()
+  //   //   .addFields({
+  //   //     liked: isLiked,
+  //   //     disliked: isDisliked,
+  //   //   })
+  //   //   .lookup({
+  //   //     from: 'categories',
+  //   //     localField: 'category',
+  //   //     foreignField: '_id',
+  //   //     as: 'category',
+  //   //   })
+  //   //   .lookup({
+  //   //     from: 'reviews',
+  //   //     localField: 'reviews',
+  //   //     foreignField: '_id',
+  //   //     as: 'reviews',
+  //   //   })
+  //   //   .lookup({
+  //   //     from: 'acters',
+  //   //     localField: 'acters',
+  //   //     foreignField: '_id',
+  //   //     as: 'acters',
+  //   //   })
+
+  //   // return films[0]
+  // }
 
   async createFilm(
     dto: CreateFilmDto,
@@ -145,30 +190,5 @@ export class FilmsService {
     } catch (e) {
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST)
     }
-  }
-
-  async addRating({ film_id, rating }: AddRatingDto) {
-    const film = await this.filmModel.findById(film_id)
-
-    if (!film) {
-      throw new HttpException('Фильм не найден', HttpStatus.NOT_FOUND)
-    }
-
-    if (film.numberOfVoters === 0 && film.rating === 0) {
-      film.numberOfVoters += 1
-      film.rating = Number(rating)
-
-      film.save()
-      return film
-    }
-
-    film.numberOfVoters += 1
-    film.rating =
-      (film.rating * (film.numberOfVoters - 1) + Number(rating)) /
-      film.numberOfVoters
-
-    film.rating = Number(film.rating.toFixed(1))
-    film.save()
-    return film
   }
 }

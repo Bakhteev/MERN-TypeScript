@@ -1,10 +1,16 @@
-import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common'
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { CreateUserDto } from 'src/user/dto/create-user.dto'
 import { LogInUserDto } from 'src/user/dto/login-user.dto'
 import { UserService } from 'src/user/user.service'
 import * as bcrypt from 'bcrypt'
 import { UserDocument } from 'src/user/schema/user.schema'
+import { Response } from 'express'
 
 @Injectable()
 export class AuthService {
@@ -28,6 +34,7 @@ export class AuthService {
     const payload = { email: user.email, id: user._id, roles: user.roles }
     return {
       token: this.jwtService.sign(payload),
+      user,
     }
   }
 

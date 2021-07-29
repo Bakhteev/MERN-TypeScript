@@ -3,8 +3,11 @@ import {
   Controller,
   Get,
   NotFoundException,
+  Param,
   Post,
   Query,
+  Req,
+  Res,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -12,7 +15,7 @@ import {
 import { FileFieldsInterceptor } from '@nestjs/platform-express'
 import { CreateFilmDto } from './dto/create-film.dto'
 import { FilmsService } from './films.service'
-import { AddRatingDto } from './dto/add-rating.dto'
+import { AddRatingDto } from '../rating/dto/add-rating.dto'
 import { RolesGuard } from 'src/auth/guards/roles.guard'
 import { Roles } from 'src/auth/roles.decorator'
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard'
@@ -37,11 +40,15 @@ export class FilmsController {
     )
   }
 
-  @Get()
-  getFilmById(@Query('filmId') filmId: string) {
-    console.log(filmId)
+  @Get(':filmId')
+  async getFilmById(@Param('filmId') filmId: string, @Req() req: any) {
+    // console.log(req.cookies)
 
-    const film = this.filmsService.getFilmById(filmId)
+    const film = await this.filmsService.getFilmById(
+      filmId,
+      true,
+      JSON.parse(req.cookies.userId)
+    )
     if (!film) {
       throw new NotFoundException('Данный фильм не найден')
     }
@@ -66,11 +73,5 @@ export class FilmsController {
       film[0],
       authorPicture[0]
     )
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Post('/rating')
-  addRating(@Body() dto: AddRatingDto) {
-    return this.filmsService.addRating(dto)
   }
 }

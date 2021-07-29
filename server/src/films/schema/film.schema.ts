@@ -75,6 +75,12 @@ export class Film extends TimeStamps {
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }] })
   reviews: Review[]
+  
+  @Prop()
+  liked?: boolean
+
+  @Prop()
+  disliked?: boolean
 }
 
 export const FilmSchema = SchemaFactory.createForClass(Film)
