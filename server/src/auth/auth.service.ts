@@ -11,6 +11,7 @@ import { UserService } from 'src/user/user.service'
 import * as bcrypt from 'bcrypt'
 import { UserDocument } from 'src/user/schema/user.schema'
 import { Response } from 'express'
+import { ChangePasswordDto } from './dto/change-password.dto'
 
 @Injectable()
 export class AuthService {
@@ -19,9 +20,9 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
-  private async validateUser(userDto: CreateUserDto | LogInUserDto) {
-    const user = await this.userService.getUserByEmail(userDto.email)
-    const passwordEquals = await bcrypt.compare(userDto.password, user.password)
+  private async validateUser(email: string, password: string) {
+    const user = await this.userService.getUserByEmail(email)
+    const passwordEquals = await bcrypt.compare(password, user.password)
     if (user && passwordEquals) {
       return user
     }
@@ -38,24 +39,33 @@ export class AuthService {
     }
   }
 
-  async login(userDto: LogInUserDto) {
-    const user = await this.validateUser(userDto)
+  async login({ email, password }: LogInUserDto) {
+    const user = await this.validateUser(email, password)
     return this.generateToken(user)
   }
 
   async registration(userDto: CreateUserDto) {
     const candidate = await this.userService.getUserByEmail(userDto.email)
-    if (candidate) {
-      throw new HttpException(
-        'Пользователь с таким Email существует',
-        HttpStatus.BAD_REQUEST
-      )
-    }
     const hashPassword = await bcrypt.hash(userDto.password, 5)
     const user = await this.userService.createUser({
       ...userDto,
       password: hashPassword,
     })
     return this.generateToken(user)
+  }
+
+  async changePassword({ email, oldPassword, newPassword }: ChangePasswordDto) {
+    console.log(email)
+    const user = await this.validateUser(email, oldPassword)
+
+    const hashPassword = await bcrypt.hash(newPassword, 5)
+
+    user.password = hashPassword
+    user.save()
+    return 'Пароль успешно изменен'
+  }
+
+  async forgotPassword(){
+    
   }
 }

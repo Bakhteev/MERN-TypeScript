@@ -13,7 +13,9 @@ import { Roles } from 'src/auth/roles.decorator'
 import { RolesGuard } from 'src/auth/guards/roles.guard'
 import { AddRoleDto } from './dto/add-role.dto'
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard'
+import { ApiTags } from '@nestjs/swagger'
 
+@ApiTags('User')
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}

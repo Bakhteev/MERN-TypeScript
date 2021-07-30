@@ -1,4 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model, Types } from 'mongoose'
 import { CreateUserDto } from './dto/create-user.dto'
@@ -46,6 +51,9 @@ export class UserService {
 
   async getUserByEmail(email: string) {
     const user = await this.userModel.findOne({ email })
+    if (!user) {
+      throw new BadRequestException('Пользователь с таким Email существует')
+    }
     return user
   }
 

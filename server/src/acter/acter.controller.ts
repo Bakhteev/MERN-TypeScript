@@ -13,7 +13,9 @@ import { RolesGuard } from 'src/auth/guards/roles.guard'
 import { ActerService } from './acter.service'
 import { CreateActerDto } from './dto/create-acter.dto'
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard'
+import { ApiTags } from '@nestjs/swagger'
 
+@ApiTags('Acters')
 @Controller('acter')
 export class ActerController {
   constructor(private acterService: ActerService) {}
