@@ -15,9 +15,8 @@ const start = async () => {
       .setTitle('Api of Film Site ""')
       .setDescription('Документация REAS API')
       .setVersion('1.0.0')
-      .addTag('Bakhteev')
       .build()
-      
+
     const document = SwaggerModule.createDocument(app, config)
 
     SwaggerModule.setup('/api/docs', app, document)

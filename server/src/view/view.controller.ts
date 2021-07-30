@@ -1,8 +1,10 @@
 import { Controller, Param, Post, Query, UseGuards } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard'
 import { UseGetUserIdDecorator } from 'src/decorators/getUser.decorator'
 import { ViewService } from './view.service'
 
+@ApiTags('View')
 @Controller('view')
 export class ViewController {
   constructor(private viewService: ViewService) {}
